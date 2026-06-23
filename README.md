@@ -120,7 +120,7 @@ erDiagram
         bigint id PK
         string name
         string email
-        string role "admin/customer"
+        string role
     }
     
     categories {
@@ -151,9 +151,9 @@ erDiagram
         bigint user_id FK
         string midtrans_order_id
         integer total_amount
-        string order_type "dine_in/takeaway"
+        string order_type
         string table_number
-        string order_status "pending/processing/completed"
+        string order_status
         string payment_status
         string payment_type
     }
@@ -172,7 +172,7 @@ erDiagram
         bigint user_id FK
         datetime reservation_time
         integer number_of_people
-        string status "pending/approved/rejected/cancelled"
+        string status
     }
     
     notifications {
