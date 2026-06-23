@@ -1,58 +1,199 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Cafe Taraka - Sistem Manajemen & Pemesanan Cafe
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Cafe Taraka adalah aplikasi **manajemen pesanan dan operasional cafe berbasis web** yang dibangun menggunakan **Tech Stack VILT (Vue.js, Inertia.js, Laravel, Tailwind CSS)**.
+Aplikasi ini ditujukan untuk mempermudah pelanggan dalam memesan makanan (Dine-in & Takeaway), melakukan reservasi meja, bertanya pada AI Assistant, serta mempermudah Admin dalam mengelola pesanan, menu, dan operasional cafe secara terintegrasi.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## ✨ Fitur Utama
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+🔒 **Autentikasi & Keamanan**
+- Login Admin dan Customer
+- Enkripsi password dan perlindungan rute menggunakan Middleware (Inertia & Laravel)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+📦 **Manajemen Data Master (Admin)**
+- Manajemen Kategori & Menu (Harga, gambar, level gula, dll)
+- Manajemen Bahan Baku (Ingredients) & Alergen
+- Cetak QR Code Meja untuk pelanggan
+- Kustomisasi Tema Website (Warna utama & aksen)
 
-## Learning Laravel
+🛒 **Pemesanan & Pembayaran (Customer)**
+- Pemesanan Menu dengan Opsi Dine-In & Takeaway
+- Integrasi Payment Gateway **Midtrans** (QRIS, GoPay, Transfer Bank, dll)
+- Riwayat Pesanan dan Status Real-time (Pending, Diproses, Selesai)
+- Reservasi Meja secara online
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+🤖 **Asisten AI Terintegrasi**
+- **AI Chatbot:** Asisten cerdas untuk menjawab pertanyaan seputar cafe dan menu.
+- **AI Menu Contextual:** Membantu pelanggan mengecek detail alergen dan bahan baku pada menu tertentu.
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+## 🧱 Tech Stack
 
-## Agentic Development
+- **Backend**: Laravel 11 (PHP 8.2+)
+- **Frontend**: Vue.js 3, Inertia.js
+- **Styling**: Tailwind CSS
+- **Database**: MySQL / SQLite
+- **Payment Gateway**: Midtrans
+- **Server lokal**: Laragon / XAMPP
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+---
 
-```bash
-composer require laravel/boost --dev
+## 📂 Struktur Folder & Arsitektur
 
-php artisan boost:install
+Aplikasi ini menggunakan arsitektur monolitik modern yang digerakkan oleh **Inertia.js**, menghubungkan backend Laravel langsung dengan frontend Vue.js tanpa perlu membuat API manual untuk rendering halaman.
+
+<details>
+<summary>▶ Klik untuk melihat Struktur Folder Lengkap</summary>
+
+```text
+taraka-vilt/
+├── app/
+│   ├── Ai/           # Logika AI Assistant (MenuAssistantAgent)
+│   ├── Http/
+│   │   ├── Controllers/  # Controller terpisah untuk Admin, Customer, & API
+│   │   └── Middleware/
+│   └── Models/       # Model Eloquent (User, Menu, Order, dll)
+├── database/
+│   ├── migrations/   # Skema database
+│   └── seeders/      # Data awal (Dummy)
+├── public/           # File statis dan build Vite
+├── resources/
+│   ├── css/          # Tailwind setup
+│   ├── js/
+│   │   ├── Pages/    # Halaman Vue (Admin & Customer)
+│   │   ├── shared/   # Layouts dan composables
+│   │   └── widgets/  # Komponen UI yang dapat digunakan kembali
+│   └── views/        # app.blade.php (Entry point Inertia)
+└── routes/
+    ├── web.php       # Rute utama (Inertia)
+    └── api.php       # Rute API (AI Chat, Midtrans Webhook)
+```
+</details>
+
+---
+
+## 🗄️ Struktur Database (Inti)
+
+Tabel utama:
+- `users`: Data autentikasi pelanggan dan admin
+- `categories`: Kategori menu (Makanan, Minuman, dll)
+- `menus`: Data utama produk menu cafe
+- `ingredients`: Data bahan baku menu untuk referensi alergi
+- `orders`: Transaksi pemesanan oleh pelanggan
+- `order_items`: Detail item pesanan dari sebuah transaksi
+- `reservations`: Data pemesanan / booking meja
+- `agent_conversations`: Riwayat obrolan AI dengan pelanggan
+- `themes`: Pengaturan warna tema UI Cafe
+
+---
+
+## 📊 Skema Database (ERD)
+
+Berikut adalah ringkasan struktur relasi database aplikasi Cafe Taraka:
+
+```mermaid
+erDiagram
+    users {
+        bigint id PK
+        string name
+        string email
+        string role "admin/customer"
+    }
+    
+    categories {
+        bigint id PK
+        string name
+    }
+    
+    menus {
+        bigint id PK
+        bigint category_id FK
+        string name
+        integer price
+        text description
+    }
+    
+    ingredients {
+        bigint id PK
+        string name
+    }
+    
+    menu_ingredient {
+        bigint menu_id FK
+        bigint ingredient_id FK
+    }
+    
+    orders {
+        bigint id PK
+        bigint user_id FK
+        string midtrans_order_id
+        integer total_amount
+        string order_type "dine_in/takeaway"
+        string table_number
+        string order_status "pending/processing/completed"
+        string payment_status
+        string payment_type
+    }
+    
+    order_items {
+        bigint id PK
+        bigint order_id FK
+        bigint menu_id FK
+        integer quantity
+        string sugar_level
+        string notes
+    }
+    
+    reservations {
+        bigint id PK
+        bigint user_id FK
+        datetime reservation_time
+        integer number_of_people
+        string status "pending/approved/rejected/cancelled"
+    }
+
+    users ||--o{ orders : "melakukan"
+    users ||--o{ reservations : "membuat"
+    categories ||--o{ menus : "memiliki"
+    menus ||--o{ menu_ingredient : "terdiri dari"
+    ingredients ||--o{ menu_ingredient : "digunakan di"
+    orders ||--o{ order_items : "berisi"
+    menus ||--o{ order_items : "dipesan di"
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+---
 
-## Contributing
+## ⚙️ Instalasi Lokal
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+1. **Clone repository ini:**
+   ```bash
+   git clone https://github.com/voltakits725/taraka-vilt.git
+   ```
+2. **Masuk ke folder project & Install dependencies:**
+   ```bash
+   cd taraka-vilt
+   composer install
+   npm install
+   ```
+3. **Setup File Environment:**
+   - Duplikat file `.env.example` dan ubah namanya menjadi `.env`.
+   - Sesuaikan konfigurasi database (DB_CONNECTION, DB_DATABASE, dll).
+   - Isi kredensial Midtrans (`MIDTRANS_SERVER_KEY`, `MIDTRANS_CLIENT_KEY`).
+   - Isi API Key AI (Misalnya Gemini/OpenAI).
+4. **Generate App Key & Database:**
+   ```bash
+   php artisan key:generate
+   php artisan migrate --seed
+   ```
+5. **Jalankan Aplikasi:**
+   - Jalankan backend Laravel:
+     ```bash
+     php artisan serve
+     ```
+   - Jalankan frontend Vite:
+     ```bash
+     npm run dev
+     ```
+   - Buka browser dan akses `http://localhost:8000`.
