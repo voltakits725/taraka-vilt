@@ -29,6 +29,22 @@ Aplikasi ini ditujukan untuk mempermudah pelanggan dalam memesan makanan (Dine-i
 
 ---
 
+## 🎨 Tema & Personalisasi UI (Theming)
+
+Aplikasi ini dilengkapi dengan fitur ganti tema (*Theming*) yang dinamis menggunakan *CSS Variables* dan Vue Composables (`useTheme.js`). Baik pelanggan maupun admin dapat mengubah tampilan UI sesuai selera. Pilihan tema yang tersedia:
+
+- ☕ **Midnight Espresso**: Gelap elegan dengan aksen karamel hangat. Vibes cafe malam yang intim.
+- 🍵 **Matcha Oasis**: Segar & bersih. Nuansa hijau matcha yang menenangkan untuk siang hari.
+- 🥛 **Latte Crema**: Hangat & cozy seperti segelas latte di pagi hari. Tone krem yang premium.
+- 🖤 **Cold Brew Noir**: Ultra dark & moody. Hitam pekat yang bold seperti cold brew original.
+- 🌸 **Sakura Milk**: Lembut merah muda seperti sakura latte. Estetik & feminine.
+- 👑 **Royal Blue Reserve**: Biru navy premium dengan aksen emas. Elegan seperti cafe bintang lima.
+- 🍫 **Mocha Velvet**: Coklat tua beludru yang hangat. Classic cafe feel yang nggak pernah salah.
+- 🌿 **Mint Chocolate**: Hijau mint segar dipadukan coklat. Unik, playful, tapi tetap premium.
+- 🫖 **Earl Grey Minimal**: Abu terang yang sangat bersih & minimalis. Fokus ke konten.
+
+---
+
 ## 🧱 Tech Stack
 
 - **Backend**: Laravel 13 (PHP 8.4+)
