@@ -31,12 +31,12 @@ Aplikasi ini ditujukan untuk mempermudah pelanggan dalam memesan makanan (Dine-i
 
 ## 🧱 Tech Stack
 
-- **Backend**: Laravel 11 (PHP 8.2+)
+- **Backend**: Laravel 13 (PHP 8.4+)
 - **Frontend**: Vue.js 3, Inertia.js
 - **Styling**: Tailwind CSS
-- **Database**: MySQL / SQLite
-- **Payment Gateway**: Midtrans
-- **Server lokal**: Laragon / XAMPP
+- **Database**: MySQL
+- **Payment Gateway**: Midtrans (SANDBOX)
+- **Server lokal**: Laragon
 
 ---
 
@@ -153,9 +153,37 @@ erDiagram
         integer number_of_people
         string status "pending/approved/rejected/cancelled"
     }
+    
+    notifications {
+        uuid id PK
+        string type
+        string notifiable_type
+        bigint notifiable_id
+        text data
+        timestamp read_at
+    }
+
+    agent_conversations {
+        string id PK
+        bigint user_id FK
+        string session_id
+        string title
+    }
+
+    agent_conversation_messages {
+        string id PK
+        string conversation_id FK
+        bigint user_id FK
+        string agent
+        string role
+        text content
+    }
 
     users ||--o{ orders : "melakukan"
     users ||--o{ reservations : "membuat"
+    users ||--o{ notifications : "menerima"
+    users ||--o{ agent_conversations : "memiliki"
+    agent_conversations ||--o{ agent_conversation_messages : "berisi"
     categories ||--o{ menus : "memiliki"
     menus ||--o{ menu_ingredient : "terdiri dari"
     ingredients ||--o{ menu_ingredient : "digunakan di"
