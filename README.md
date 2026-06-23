@@ -17,11 +17,16 @@ Aplikasi ini ditujukan untuk mempermudah pelanggan dalam memesan makanan (Dine-i
 - Cetak QR Code Meja untuk pelanggan
 - Kustomisasi Tema Website (Warna utama & aksen)
 
-🛒 **Pemesanan & Pembayaran (Customer)**
-- Pemesanan Menu dengan Opsi Dine-In & Takeaway
-- Integrasi Payment Gateway **Midtrans** (QRIS, GoPay, Transfer Bank, dll)
-- Riwayat Pesanan dan Status Real-time (Pending, Diproses, Selesai)
-- Reservasi Meja secara online
+🛒 **Eksplorasi & Pemesanan (Customer)**
+- **Pencarian & Filter Menu:** Cari nama menu, filter berdasarkan Kategori (Coffee, Dessert, Food, Drink).
+- **Pengurutan (Sort):** Urutkan harga dari termurah, termahal, atau normal.
+- **Opsi Pesanan:** Pemesanan dengan opsi *Dine-In* & *Takeaway* (Bawa Pulang).
+- **Booking Meja (Reservasi):** Fitur pemesanan meja secara *online* sebelum kedatangan.
+
+💳 **Pembayaran & Riwayat**
+- **Payment Gateway Midtrans:** Mendukung QRIS, GoPay, OVO, Transfer Bank, dll (Mode Sandbox).
+- **Riwayat Pesanan:** Pantau terus status pesanan secara *real-time* (Pending, Diproses, Selesai).
+- **Riwayat Reservasi:** Cek status booking meja (Disetujui, Ditolak, Menunggu).
 
 🤖 **Asisten AI Terintegrasi**
 - **AI Chatbot:** Asisten cerdas untuk menjawab pertanyaan seputar cafe dan menu.
