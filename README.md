@@ -102,6 +102,7 @@ Tabel utama:
 - `categories`: Kategori menu (Makanan, Minuman, dll)
 - `menus`: Data utama produk menu cafe
 - `ingredients`: Data bahan baku menu untuk referensi alergi
+- `tables`: Data referensi meja kafe (dinamis)
 - `orders`: Transaksi pemesanan oleh pelanggan
 - `order_items`: Detail item pesanan dari sebuah transaksi
 - `reservations`: Data pemesanan / booking meja
@@ -126,6 +127,13 @@ erDiagram
     categories {
         bigint id PK
         string name
+    }
+
+    tables {
+        bigint id PK
+        integer number
+        integer capacity
+        string status
     }
     
     menus {
@@ -210,6 +218,8 @@ erDiagram
     ingredients ||--o{ menu_ingredient : "digunakan di"
     orders ||--o{ order_items : "berisi"
     menus ||--o{ order_items : "dipesan di"
+    tables ||--o{ orders : "digunakan untuk"
+    tables ||--o{ reservations : "dibooking untuk"
 ```
 
 ---

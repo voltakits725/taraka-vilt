@@ -12,8 +12,39 @@ class CartController extends Controller
     public function index()
     {
         $cartItems = session()->get('cart', []);
+        
+        $now = \Carbon\Carbon::now();
+        $date = $now->toDateString();
+
+        $bookedTables = \App\Models\Reservation::where('reservation_date', $date)
+            ->whereIn('status', ['pending', 'confirmed'])
+            ->get()
+            ->filter(function ($res) use ($now) {
+                $resTime = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $res->reservation_date . ' ' . $res->reservation_time);
+                return abs($now->diffInMinutes($resTime, false)) < 120;
+            })
+            ->pluck('table_number')
+            ->toArray();
+
+        $activeOrders = \App\Models\Order::where('order_type', 'dine_in')
+            ->whereIn('order_status', ['pending', 'processing'])
+            ->whereDate('created_at', $date)
+            ->get()
+            ->filter(function ($order) use ($now) {
+                $orderTime = \Carbon\Carbon::parse($order->created_at);
+                return abs($now->diffInMinutes($orderTime, false)) < 120;
+            })
+            ->pluck('table_number')
+            ->toArray();
+
+        $allBooked = array_values(array_unique(array_merge($bookedTables, $activeOrders)));
+        
+        $activeTables = \App\Models\Table::where('status', 'active')->orderBy('number')->get();
+
         return Inertia::render('Customer/Cart/Index', [
-            'cartItems' => array_values($cartItems)
+            'cartItems' => array_values($cartItems),
+            'bookedTables' => $allBooked,
+            'activeTables' => $activeTables
         ]);
     }
 

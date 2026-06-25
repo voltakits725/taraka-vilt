@@ -10,6 +10,14 @@ const props = defineProps({
     cartItems: {
         type: Array,
         default: () => []
+    },
+    bookedTables: {
+        type: Array,
+        default: () => []
+    },
+    activeTables: {
+        type: Array,
+        default: () => []
     }
 })
 
@@ -236,7 +244,7 @@ const handleCheckout = () => {
             <div class="w-full lg:w-1/3">
                 <div class="sticky top-28">
                     
-                    <TableSelector v-if="!$page.props.activeTable" @update:table="tableNumber = $event" />
+                    <TableSelector v-if="!$page.props.activeTable" :bookedTables="bookedTables" :activeTables="activeTables" @update:table="tableNumber = $event" />
                     
                     <div v-else class="bg-surface border border-border-theme p-6 rounded-3xl shadow-sm mb-6 flex items-center justify-between">
                         <div>

@@ -1,18 +1,16 @@
 <?php
-require __DIR__.'/vendor/autoload.php';
-$app = require_once __DIR__.'/bootstrap/app.php';
+require 'vendor/autoload.php';
+$app = require_once 'bootstrap/app.php';
 $kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
 $kernel->bootstrap();
 
 try {
-    $res = \Laravel\Ai\AnonymousAgent::make('hi', [], [])->prompt('test', provider: 'gemini')->text();
-    echo "SUCCESS: " . $res;
+    $agent = new App\Ai\Agents\MenuAssistantAgent();
+    $participant = (object) ['id' => null, 'session_id' => '123'];
+    $agent->forUser($participant);
+    $response = $agent->prompt("tes", provider: 'gemini');
+    echo "Response: " . $response->text;
 } catch (\Exception $e) {
-    echo "ERROR: " . $e->getMessage() . "\n";
-    if ($e->getPrevious()) {
-        echo "PREVIOUS: " . $e->getPrevious()->getMessage() . "\n";
-        if (method_exists($e->getPrevious(), 'response')) {
-            echo "RESPONSE: " . $e->getPrevious()->response->body() . "\n";
-        }
-    }
+    echo "Error: " . $e->getMessage() . "\n";
+    echo $e->getTraceAsString();
 }

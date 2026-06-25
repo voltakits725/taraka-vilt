@@ -120,6 +120,7 @@ class AIChatController extends Controller
             ]);
 
         } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('AI Error: ' . $e->getMessage() . "\n" . $e->getTraceAsString());
             return response()->json([
                 'error' => 'Gagal terhubung ke AI: ' . $e->getMessage()
             ], 500);

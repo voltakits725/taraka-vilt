@@ -16,7 +16,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        for ($i = 1; $i <= 15; $i++) {
+            \App\Models\Table::create([
+                'number' => $i,
+                'capacity' => 4,
+                'status' => 'active'
+            ]);
+        }
 
        User::create([
             'name' => 'Super Admin',

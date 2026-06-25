@@ -1,13 +1,23 @@
 <script setup>
 import { ref } from 'vue'
 
+const props = defineProps({
+    bookedTables: {
+        type: Array,
+        default: () => []
+    },
+    activeTables: {
+        type: Array,
+        default: () => []
+    }
+})
+
 const emit = defineEmits(['update:table'])
 const selectedTable = ref('')
 
-// Total meja kafe lo
-const totalTables = 15
-
 const selectTable = (n) => {
+    if (props.bookedTables.includes(n)) return;
+    
     selectedTable.value = n
     emit('update:table', selectedTable.value)
 }
@@ -27,17 +37,20 @@ const selectTable = (n) => {
 
         <div class="grid grid-cols-5 gap-2 md:gap-3">
             <button
-                v-for="n in totalTables"
-                :key="n"
-                @click="selectTable(n)"
+                v-for="table in activeTables"
+                :key="table.id"
+                @click="selectTable(table.number)"
+                :disabled="bookedTables.includes(table.number)"
                 :class="[
                     'py-2.5 rounded-xl font-extrabold text-sm transition-all border-2 flex items-center justify-center',
-                    selectedTable === n
-                        ? 'bg-accent border-accent text-white shadow-md shadow-accent/30 scale-105'
-                        : 'bg-surface border-border-theme text-text-muted hover:border-accent/50 hover:text-text-main'
+                    bookedTables.includes(table.number) 
+                        ? 'bg-surface border-border-theme text-text-muted/30 cursor-not-allowed'
+                        : selectedTable === table.number
+                            ? 'bg-accent border-accent text-white shadow-md shadow-accent/30 scale-105'
+                            : 'bg-surface border-border-theme text-text-muted hover:border-accent/50 hover:text-text-main'
                 ]"
             >
-                {{ n < 10 ? '0' + n : n }}
+                {{ table.number < 10 ? '0' + table.number : table.number }}
             </button>
         </div>
     </div>
