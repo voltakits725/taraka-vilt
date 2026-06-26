@@ -120,8 +120,11 @@ const formatDate = (dateString) => {
                             </span>
                         </div>
                         <div>
-                            <p class="text-xs text-text-muted uppercase tracking-wider font-bold mb-1">Nomor Meja</p>
-                            <p class="text-lg font-black text-text-main">{{ order.table_number }}</p>
+                            <p class="text-xs text-text-muted uppercase tracking-wider font-bold mb-1">{{ order.order_type === 'takeaway' ? 'Tipe Pesanan' : 'Nomor Meja' }}</p>
+                            <p class="text-lg font-black text-text-main">
+                                <span v-if="order.order_type === 'takeaway'" class="text-blue-500 text-base">TAKEAWAY</span>
+                                <span v-else>{{ order.table_number }}</span>
+                            </p>
                         </div>
                         <div>
                             <p class="text-xs text-text-muted uppercase tracking-wider font-bold mb-1">Total</p>

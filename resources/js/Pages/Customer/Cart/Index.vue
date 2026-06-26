@@ -23,7 +23,30 @@ const props = defineProps({
 
 const page = usePage()
 const tableNumber = ref(page.props.activeTable || '')
+const orderType = ref('dine_in')
+const selectedTime = ref('')
 const isProcessing = ref(false)
+
+// Generate available times (10:00 - 22:00)
+const availableTimes = Array.from({ length: 13 }, (_, i) => {
+    const hour = i + 10;
+    return `${hour.toString().padStart(2, '0')}:00`;
+});
+
+const blockedTableNumbers = computed(() => {
+    if (!selectedTime.value) return [];
+    
+    const [selH, selM] = selectedTime.value.split(':').map(Number);
+    const selMinutes = selH * 60 + selM;
+
+    return props.bookedTables.filter(b => {
+        if (!b.time) return false;
+        const [bH, bM] = b.time.split(':').map(Number);
+        const bMinutes = bH * 60 + bM;
+        
+        return Math.abs(selMinutes - bMinutes) < 120;
+    }).map(b => b.table);
+})
 
 const subTotal = computed(() => {
     return props.cartItems.reduce((total, item) => total + (item.price * item.qty), 0)
@@ -143,7 +166,7 @@ const removeItem = (item) => {
 const handleCheckout = () => {
     const c = getThemeColors()
 
-    if (!tableNumber.value) {
+    if (orderType.value === 'dine_in' && (!tableNumber.value || !selectedTime.value)) {
         Swal.fire({
             background: c.bg,
             color: c.text,
@@ -154,7 +177,7 @@ const handleCheckout = () => {
                         Oops...
                     </div>
                     <div style="font-size:14px;color:${c.muted};font-weight:500;">
-                        Pilih lokasi meja dulu bro!
+                        ${!selectedTime.value ? 'Pilih jam reservasi dulu bro!' : 'Pilih lokasi meja dulu bro!'}
                     </div>
                 </div>
             `,
@@ -170,7 +193,9 @@ const handleCheckout = () => {
     
     // POST request ke backend checkout
     router.post('/checkout', {
-        table_number: tableNumber.value
+        table_number: tableNumber.value,
+        order_type: orderType.value,
+        reservation_time: selectedTime.value
     }, {
         preserveScroll: true,
         onSuccess: () => {
@@ -244,15 +269,40 @@ const handleCheckout = () => {
             <div class="w-full lg:w-1/3">
                 <div class="sticky top-28">
                     
-                    <TableSelector v-if="!$page.props.activeTable" :bookedTables="bookedTables" :activeTables="activeTables" @update:table="tableNumber = $event" />
-                    
-                    <div v-else class="bg-surface border border-border-theme p-6 rounded-3xl shadow-sm mb-6 flex items-center justify-between">
-                        <div>
-                            <p class="text-text-muted text-sm font-bold">Memesan untuk</p>
-                            <h3 class="text-xl font-black text-text-main">Meja {{ $page.props.activeTable }}</h3>
+                    <!-- Order Type Selector -->
+                    <div class="bg-surface border border-border-theme p-2 rounded-2xl shadow-sm mb-6 flex">
+                        <button @click="orderType = 'dine_in'" :class="['flex-1 py-3 text-sm font-bold rounded-xl transition-all', orderType === 'dine_in' ? 'bg-accent text-white shadow-md' : 'text-text-muted hover:text-text-main']">Dine In</button>
+                        <button @click="orderType = 'takeaway'" :class="['flex-1 py-3 text-sm font-bold rounded-xl transition-all', orderType === 'takeaway' ? 'bg-accent text-white shadow-md' : 'text-text-muted hover:text-text-main']">Take Away</button>
+                    </div>
+
+                    <div v-show="orderType === 'dine_in'">
+                        <!-- Time Selector -->
+                        <div class="bg-surface border border-border-theme p-6 rounded-3xl shadow-sm mb-6">
+                            <h3 class="text-lg font-black text-text-main mb-1">Jam Reservasi</h3>
+                            <p class="text-xs text-text-muted mb-4">Pilih jam untuk mengecek ketersediaan meja.</p>
+                            <div class="grid grid-cols-4 gap-2">
+                                <button v-for="time in availableTimes" :key="time"
+                                    @click="selectedTime = time; tableNumber = ''"
+                                    :class="['py-2 rounded-xl text-sm font-bold border-2 transition-all', selectedTime === time ? 'bg-accent border-accent text-white shadow-md' : 'bg-surface border-border-theme text-text-muted hover:border-accent/50 hover:text-text-main']">
+                                    {{ time }}
+                                </button>
+                            </div>
                         </div>
-                        <div class="w-12 h-12 rounded-full bg-accent/10 flex items-center justify-center text-accent">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+
+                        <TableSelector v-if="!$page.props.activeTable && selectedTime" :bookedTables="blockedTableNumbers" :activeTables="activeTables" @update:table="tableNumber = $event" />
+                        
+                        <div v-else-if="!$page.props.activeTable && !selectedTime" class="text-center p-5 bg-surface border border-border-theme rounded-2xl text-text-muted text-sm font-medium mb-6">
+                            Silakan pilih jam reservasi di atas untuk melihat meja yang tersedia.
+                        </div>
+                        
+                        <div v-else class="bg-surface border border-border-theme p-6 rounded-3xl shadow-sm mb-6 flex items-center justify-between">
+                            <div>
+                                <p class="text-text-muted text-sm font-bold">Memesan untuk</p>
+                                <h3 class="text-xl font-black text-text-main">Meja {{ $page.props.activeTable }}</h3>
+                            </div>
+                            <div class="w-12 h-12 rounded-full bg-accent/10 flex items-center justify-center text-accent">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            </div>
                         </div>
                     </div>
 

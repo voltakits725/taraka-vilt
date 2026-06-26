@@ -6,11 +6,24 @@ $kernel->bootstrap();
 
 try {
     $agent = new App\Ai\Agents\MenuAssistantAgent();
-    $participant = (object) ['id' => null, 'session_id' => '123'];
-    $agent->forUser($participant);
-    $response = $agent->prompt("tes", provider: 'gemini');
-    echo "Response: " . $response->text;
+    $response = $agent->prompt('Tes', provider: 'openai');
+    echo 'SUCCESS OpenAI: ' . $response->text . "\n";
 } catch (\Exception $e) {
-    echo "Error: " . $e->getMessage() . "\n";
-    echo $e->getTraceAsString();
+    echo 'ERROR OpenAI: ' . $e->getMessage() . "\n";
+}
+
+try {
+    $agent = new App\Ai\Agents\MenuAssistantAgent();
+    $response = $agent->prompt('Tes', provider: 'anthropic');
+    echo 'SUCCESS Anthropic: ' . $response->text . "\n";
+} catch (\Exception $e) {
+    echo 'ERROR Anthropic: ' . $e->getMessage() . "\n";
+}
+
+try {
+    $agent = new App\Ai\Agents\MenuAssistantAgent();
+    $response = $agent->prompt('Tes', provider: 'groq');
+    echo 'SUCCESS Groq: ' . $response->text . "\n";
+} catch (\Exception $e) {
+    echo 'ERROR Groq: ' . $e->getMessage() . "\n";
 }

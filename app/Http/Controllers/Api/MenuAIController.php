@@ -44,7 +44,7 @@ class MenuAIController extends Controller
         try {
             // Using Laravel AI Facade
             $response = \Laravel\Ai\AnonymousAgent::make($systemPrompt, [], [])
-                ->prompt($request->question, provider: 'gemini');
+                ->prompt($request->question, provider: 'groq');
 
             // Extract text from AI response
             $jsonResponse = $response->text;

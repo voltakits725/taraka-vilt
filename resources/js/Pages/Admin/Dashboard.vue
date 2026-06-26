@@ -490,25 +490,13 @@ watch(selectedFilter, (newVal) => {
                     </div>
                     <p class="text-sm text-text-muted text-center font-medium">Persentase pesanan yang berhasil dibayar dari total transaksi masuk.</p>
                 </div>
-
-                <!-- Avg Order Value -->
-                <div class="bg-surface border border-border-theme rounded-3xl p-6 md:p-8 shadow-sm flex flex-col justify-between">
-                    <h3 class="text-xl font-extrabold text-text-main mb-4">Rata-rata Nilai Pesanan</h3>
-                    <div>
-                        <p class="text-4xl md:text-5xl font-extrabold text-accent">
-                            Rp {{ (payment?.avgOrderValue ?? 0).toLocaleString('id-ID') }}
-                        </p>
-                        <p class="text-sm text-text-muted mt-3 font-medium">Nilai rata-rata yang dikeluarkan pelanggan dalam satu kali transaksi yang lunas.</p>
-                    </div>
-                    <!-- Payment Method Distribution -->
-                    <div class="mt-6">
-                        <p class="text-sm font-bold text-text-muted uppercase tracking-wider mb-3">Metode Pembayaran</p>
-                        <div class="space-y-2">
-                            <div v-for="m in payment?.methods" :key="m.payment_type" class="flex items-center justify-between text-sm">
-                                <span class="font-semibold text-text-main">{{ m.label }}</span>
-                                <span class="font-bold text-accent">{{ m.total }} transaksi</span>
-                            </div>
-                            <p v-if="!payment?.methods?.length" class="text-text-muted text-sm">Belum ada data metode pembayaran.</p>
+                <!-- Metode Pembayaran Doughnut -->
+                <div class="bg-surface border border-border-theme rounded-3xl p-6 md:p-8 shadow-sm">
+                    <h3 class="text-xl font-extrabold text-text-main mb-6">Metode Pembayaran Favorit</h3>
+                    <div class="w-full h-[260px]">
+                        <Doughnut v-if="paymentMethodChartData.labels.length > 0" :data="paymentMethodChartData" :options="doughnutOptions" />
+                        <div v-else class="w-full h-full flex items-center justify-center text-text-muted font-bold">
+                            Belum ada data metode pembayaran.
                         </div>
                     </div>
                 </div>
@@ -524,16 +512,7 @@ watch(selectedFilter, (newVal) => {
                     </div>
                 </div>
 
-                <!-- Metode Pembayaran Doughnut -->
-                <div class="bg-surface border border-border-theme rounded-3xl p-6 md:p-8 shadow-sm">
-                    <h3 class="text-xl font-extrabold text-text-main mb-6">Metode Pembayaran Favorit</h3>
-                    <div class="w-full h-[260px]">
-                        <Doughnut v-if="paymentMethodChartData.labels.length > 0" :data="paymentMethodChartData" :options="doughnutOptions" />
-                        <div v-else class="w-full h-full flex items-center justify-center text-text-muted font-bold">
-                            Belum ada data metode pembayaran.
-                        </div>
-                    </div>
-                </div>
+
             </div>
 
         </div> <!-- End Tab 3 -->

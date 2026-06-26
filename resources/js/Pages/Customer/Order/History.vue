@@ -35,7 +35,7 @@ defineProps({
                             <tr class="bg-black/5 text-text-secondary text-sm">
                                 <th class="py-4 px-6 font-semibold whitespace-nowrap">Order ID</th>
                                 <th class="py-4 px-6 font-semibold whitespace-nowrap">Tanggal</th>
-                                <th class="py-4 px-6 font-semibold whitespace-nowrap">Meja</th>
+                                <th class="py-4 px-6 font-semibold whitespace-nowrap text-center">Tipe / Meja</th>
                                 <th class="py-4 px-6 font-semibold whitespace-nowrap">Total</th>
                                 <th class="py-4 px-6 font-semibold whitespace-nowrap">Status Pesanan</th>
                                 <th class="py-4 px-6 font-semibold whitespace-nowrap">Status Bayar</th>
@@ -51,7 +51,8 @@ defineProps({
                                     {{ new Date(order.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) }}
                                 </td>
                                 <td class="py-4 px-6 font-semibold text-center">
-                                    {{ order.table_number }}
+                                    <span v-if="order.order_type === 'takeaway'" class="text-xs font-bold text-blue-500 bg-blue-50 px-2 py-1 rounded-md">TAKEAWAY</span>
+                                    <span v-else class="text-text-main">{{ order.table_number }}</span>
                                 </td>
                                 <td class="py-4 px-6 font-bold text-accent whitespace-nowrap">
                                     {{ new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(order.total_amount) }}

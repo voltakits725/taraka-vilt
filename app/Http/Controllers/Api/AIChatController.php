@@ -100,8 +100,8 @@ class AIChatController extends Controller
                 }
             }
 
-            // Generate response using gemini
-            $response = $agent->prompt($request->question, provider: 'gemini');
+            // Generate response using groq
+            $response = $agent->prompt($request->question, provider: 'groq');
 
             // Find out the assigned conversation ID 
             $conversationId = $agent->currentConversation();

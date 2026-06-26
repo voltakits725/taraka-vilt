@@ -27,20 +27,33 @@ class CheckoutController extends Controller
      */
     public function checkout(Request $request)
     {
-        // Ambil table_number dari session, atau dari request (jika pilih manual)
-        $tableNumber = session()->get('table_number') ?: $request->table_number;
-        $orderType = $tableNumber ? 'dine_in' : 'takeaway';
+        // Ambil order_type dari request, default ke dine_in jika kosong
+        $orderType = $request->order_type ?? 'dine_in';
+        
+        // Jika takeaway, isi dengan strip agar tidak error column cannot be null
+        if ($orderType === 'takeaway') {
+            $tableNumber = '-';
+        } else {
+            $tableNumber = session()->get('table_number') ?: $request->table_number;
+        }
 
         if ($orderType === 'dine_in') {
             $now = \Carbon\Carbon::now();
             
+            if (!$request->reservation_time) {
+                return back()->withErrors(['checkout' => 'Gagal: Jam reservasi wajib dipilih.']);
+            }
+
+            // Gabungkan tanggal hari ini dengan jam yang dipilih
+            $requestedResTime = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $now->toDateString() . ' ' . $request->reservation_time . ':00');
+
             $activeReservation = \App\Models\Reservation::where('table_number', $tableNumber)
                 ->where('reservation_date', $now->toDateString())
                 ->whereIn('status', ['pending', 'confirmed'])
                 ->get()
-                ->first(function ($reservation) use ($now) {
+                ->first(function ($reservation) use ($requestedResTime) {
                     $resTime = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $reservation->reservation_date . ' ' . $reservation->reservation_time);
-                    return abs($now->diffInMinutes($resTime, false)) < 120;
+                    return abs($requestedResTime->diffInMinutes($resTime, false)) < 120;
                 });
 
             // Jika ada yang booking, dan yang booking BUKAN user ini, tolak pesanan.
@@ -48,13 +61,13 @@ class CheckoutController extends Controller
                 // Hapus session table_number agar dropdown meja muncul lagi di frontend
                 $request->session()->forget('table_number');
 
-                // Cari meja apa saja yang masih kosong saat ini
+                // Cari meja apa saja yang masih kosong saat ini (berdasarkan jam yang diminta)
                 $bookedTables = \App\Models\Reservation::where('reservation_date', $now->toDateString())
                     ->whereIn('status', ['pending', 'confirmed'])
                     ->get()
-                    ->filter(function ($reservation) use ($now) {
+                    ->filter(function ($reservation) use ($requestedResTime) {
                         $resTime = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $reservation->reservation_date . ' ' . $reservation->reservation_time);
-                        return abs($now->diffInMinutes($resTime, false)) < 120;
+                        return abs($requestedResTime->diffInMinutes($resTime, false)) < 120;
                     })
                     ->pluck('table_number')
                     ->toArray();
@@ -66,7 +79,7 @@ class CheckoutController extends Controller
 
                 $resTimeFormatted = \Carbon\Carbon::createFromFormat('H:i:s', $activeReservation->reservation_time)->format('H:i');
 
-                return back()->withErrors(['checkout' => "Gagal: Meja $tableNumber sedang diresevasi untuk jam $resTimeFormatted oleh orang lain. Meja kosong saat ini: $availableStr. Silakan pilih meja lain."]);
+                return back()->withErrors(['checkout' => "Gagal: Meja $tableNumber sedang diresevasi untuk jam $resTimeFormatted oleh orang lain. Meja kosong untuk jam {$request->reservation_time}: $availableStr. Silakan pilih meja lain."]);
             }
         }
 
@@ -116,23 +129,16 @@ class CheckoutController extends Controller
                     return abs($now->diffInMinutes($resTime, false)) < 120;
                 });
 
-            // Jika belum punya (dia murni walk-in tiba-tiba scan QR), buatkan otomatis!
+            // Jika belum punya (dia murni walk-in atau booking via cart), buatkan otomatis!
             if (!$existingUserRes) {
-                // Cari slot jam terdekat (kelipatan 2 jam: 15, 17, 19, 21)
-                $currentHour = $now->hour;
-                $slotHour = 15;
-                if ($currentHour >= 17 && $currentHour < 19) $slotHour = 17;
-                elseif ($currentHour >= 19 && $currentHour < 21) $slotHour = 19;
-                elseif ($currentHour >= 21) $slotHour = 21;
-
                 \App\Models\Reservation::create([
                     'user_id' => $user->id,
                     'table_number' => $tableNumber,
                     'reservation_date' => $now->toDateString(),
-                    'reservation_time' => "$slotHour:00:00",
+                    'reservation_time' => $request->reservation_time . ':00',
                     'guest_count' => 1,
-                    'notes' => 'Auto-booking via QR Code (Walk-in)',
-                    'status' => 'confirmed' // Langsung confirmed karena dia udah di tempat
+                    'notes' => 'Auto-booking via Cart Checkout',
+                    'status' => 'confirmed' // Langsung confirmed karena sudah proses bayar
                 ]);
             }
         }
