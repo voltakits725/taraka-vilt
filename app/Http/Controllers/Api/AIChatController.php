@@ -101,7 +101,7 @@ class AIChatController extends Controller
             }
 
             // Generate response using groq
-            $response = $agent->prompt($request->question, provider: 'groq');
+            $response = $agent->prompt($request->question, provider: 'groq', model: 'llama-3.1-8b-instant');
 
             // Find out the assigned conversation ID 
             $conversationId = $agent->currentConversation();
