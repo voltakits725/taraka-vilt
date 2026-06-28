@@ -24,16 +24,16 @@ const updateStatus = (reservation, newStatus) => {
     <AdminLayout>
         <div class="mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
-                <h1 class="text-2xl font-bold text-gray-900">Reservasi Meja</h1>
-                <p class="text-gray-500 text-sm mt-1">Kelola request booking meja dari pelanggan.</p>
+                <h1 class="text-2xl font-bold text-text-main">Reservasi Meja</h1>
+                <p class="text-text-muted text-sm mt-1">Kelola request booking meja dari pelanggan.</p>
             </div>
         </div>
 
         <!-- Table Card -->
-        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div class="bg-surface rounded-xl shadow-sm border border-border-theme overflow-hidden">
             <div class="overflow-x-auto">
                 <table class="w-full text-left text-sm whitespace-nowrap">
-                    <thead class="bg-gray-50 text-gray-600">
+                    <thead class="bg-surface-hover text-text-muted">
                         <tr>
                             <th class="py-3 px-6 font-semibold">Pelanggan</th>
                             <th class="py-3 px-6 font-semibold">Meja</th>
@@ -44,16 +44,16 @@ const updateStatus = (reservation, newStatus) => {
                             <th class="py-3 px-6 font-semibold text-right">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-gray-100">
+                    <tbody class="divide-y divide-border-theme">
                         <tr v-if="reservations.data.length === 0">
-                            <td colspan="7" class="py-10 text-center text-gray-500">
+                            <td colspan="7" class="py-10 text-center text-text-muted">
                                 Belum ada data reservasi meja.
                             </td>
                         </tr>
-                        <tr v-for="res in reservations.data" :key="res.id" class="hover:bg-gray-50 transition-colors">
+                        <tr v-for="res in reservations.data" :key="res.id" class="hover:bg-surface-hover transition-colors">
                             <td class="py-4 px-6">
-                                <div class="font-bold text-gray-900">{{ res.user.name }}</div>
-                                <div class="text-gray-500 text-xs">{{ res.user.email }}</div>
+                                <div class="font-bold text-text-main">{{ res.user.name }}</div>
+                                <div class="text-text-muted text-xs">{{ res.user.email }}</div>
                             </td>
                             <td class="py-4 px-6">
                                 <span class="inline-flex items-center justify-center w-8 h-8 bg-orange-100 text-orange-600 font-bold rounded-lg border border-orange-200">
@@ -61,15 +61,15 @@ const updateStatus = (reservation, newStatus) => {
                                 </span>
                             </td>
                             <td class="py-4 px-6">
-                                <div class="font-bold text-gray-900">{{ new Date(res.reservation_date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) }}</div>
-                                <div class="text-gray-500 text-xs">{{ res.reservation_time.substring(0, 5) }} WIB</div>
+                                <div class="font-bold text-text-main">{{ new Date(res.reservation_date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) }}</div>
+                                <div class="text-text-muted text-xs">{{ res.reservation_time.substring(0, 5) }} WIB</div>
                             </td>
                             <td class="py-4 px-6 text-center font-semibold">
                                 {{ res.guest_count }} org
                             </td>
                             <td class="py-4 px-6 max-w-[200px] truncate">
-                                <span v-if="res.notes" class="text-xs text-gray-500 italic" :title="res.notes">"{{ res.notes }}"</span>
-                                <span v-else class="text-gray-300">-</span>
+                                <span v-if="res.notes" class="text-xs text-text-muted italic" :title="res.notes">"{{ res.notes }}"</span>
+                                <span v-else class="text-text-muted/50">-</span>
                             </td>
                             <td class="py-4 px-6">
                                 <span :class="[
@@ -97,7 +97,7 @@ const updateStatus = (reservation, newStatus) => {
                                     </button>
                                 </div>
                                 <div v-else>
-                                    <span class="text-xs text-gray-400 font-medium italic">Tidak ada aksi</span>
+                                    <span class="text-xs text-text-muted font-medium italic">Tidak ada aksi</span>
                                 </div>
                             </td>
                         </tr>
@@ -106,14 +106,14 @@ const updateStatus = (reservation, newStatus) => {
             </div>
             
             <!-- Pagination -->
-            <div v-if="reservations.links.length > 3" class="p-4 border-t border-gray-200 bg-gray-50 flex justify-center gap-1">
+            <div v-if="reservations.links.length > 3" class="p-4 border-t border-border-theme bg-surface-hover flex justify-center gap-1">
                 <template v-for="(link, p) in reservations.links" :key="p">
                     <Link v-if="link.url" :href="link.url" 
                         class="px-3 py-1 rounded-md text-sm transition-colors border"
-                        :class="link.active ? 'bg-orange-500 text-white border-orange-500 font-bold' : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-100'"
+                        :class="link.active ? 'bg-accent text-white border-accent font-bold' : 'bg-surface text-text-main border-border-theme hover:bg-surface-hover'"
                         v-html="link.label">
                     </Link>
-                    <span v-else class="px-3 py-1 rounded-md text-sm text-gray-400 bg-gray-100 border border-gray-200" v-html="link.label"></span>
+                    <span v-else class="px-3 py-1 rounded-md text-sm text-text-muted bg-surface-hover border border-border-theme" v-html="link.label"></span>
                 </template>
             </div>
         </div>
