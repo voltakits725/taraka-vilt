@@ -2,7 +2,6 @@
 import { ref, onMounted, computed } from 'vue'
 import { Link, router } from '@inertiajs/vue3'
 import axios from 'axios'
-import Swal from 'sweetalert2'
 
 const props = defineProps({
     userId: Number
@@ -16,7 +15,20 @@ const fetchNotifications = async () => {
     try {
         const response = await axios.get('/notifications')
         notifications.value = response.data.notifications
-        unreadCount.value = response.data.unread_count
+        
+        // Hitung unread count berdasarkan localStorage (seen_at)
+        const seenAt = localStorage.getItem(`notifications_seen_${props.userId}`)
+        if (seenAt) {
+            let realCount = 0
+            notifications.value.forEach(n => {
+                if (!n.read_at && new Date(n.created_at).getTime() > parseInt(seenAt)) {
+                    realCount++
+                }
+            })
+            unreadCount.value = realCount
+        } else {
+            unreadCount.value = response.data.unread_count
+        }
     } catch (error) {
         console.error('Failed to fetch notifications', error)
     }
@@ -24,22 +36,40 @@ const fetchNotifications = async () => {
 
 const markAsRead = async (id) => {
     try {
+        // Optimistic UI update: hilangkan badge NEW langsung tanpa nunggu backend
+        const notif = notifications.value.find(n => n.id === id)
+        if (notif && !notif.read_at) {
+            notif.read_at = new Date().toISOString()
+        }
+        
         await axios.post(`/notifications/${id}/read`)
-        fetchNotifications() // refresh
     } catch (error) {
         console.error('Failed to mark as read', error)
     }
 }
 
-const toggleDropdown = () => {
+const toggleDropdown = async () => {
     isOpen.value = !isOpen.value
     if (isOpen.value) {
-        fetchNotifications()
+        // Sembunyikan badge merah dan simpan waktu terakhir dilihat ke localStorage
+        if (unreadCount.value > 0) {
+            unreadCount.value = 0
+            localStorage.setItem(`notifications_seen_${props.userId}`, Date.now().toString())
+        }
+        
+        if (notifications.value.length === 0) {
+            fetchNotifications()
+        }
     }
 }
 
 onMounted(() => {
     fetchNotifications()
+
+    // Minta izin notifikasi OS/Browser
+    if ('Notification' in window && Notification.permission === 'default') {
+        Notification.requestPermission()
+    }
 
     // Listen to Reverb Websocket
     if (window.Echo && props.userId) {
@@ -58,13 +88,28 @@ onMounted(() => {
                 router.reload()
 
                 // Munculkan popup (misalnya sweetalert atau toast)
-                if (notification.status === 'ready') {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Makanan Kamu Udah Siap!',
-                        text: notification.message,
-                        confirmButtonText: 'Oke, Saya Ambil',
-                        confirmButtonColor: '#ff6b00'
+                let title = 'Notifikasi Baru'
+                let confirmText = 'Oke'
+                
+                if (notification.type === 'order') {
+                    if (notification.status === 'completed') {
+                        title = 'Pesanan Selesai!'
+                    } else if (notification.status === 'processing') {
+                        title = 'Pesanan Diproses'
+                    }
+                } else if (notification.type === 'reservation') {
+                    if (notification.status === 'confirmed') {
+                        title = 'Booking Diterima!'
+                    } else if (notification.status === 'cancelled') {
+                        title = 'Booking Ditolak'
+                    }
+                }
+
+                // Kirim push notification bawaan HP / OS
+                if ('Notification' in window && Notification.permission === 'granted') {
+                    new Notification(title, {
+                        body: notification.message,
+                        icon: '/images/tarakav2.png'
                     })
                 }
             })
@@ -101,16 +146,17 @@ const formatDate = (dateString) => {
                 
                 <div v-for="notif in notifications" :key="notif.id" 
                     @click="markAsRead(notif.id)"
-                    :class="[
-                        'p-4 border-b border-black/5 cursor-pointer hover:bg-black/5 transition-colors',
-                        !notif.read_at ? 'bg-orange-50/50' : ''
-                    ]">
+                    class="p-4 border-b border-black/5 cursor-pointer hover:bg-black/5 transition-colors relative">
                     <div class="flex justify-between items-start mb-1">
-                        <span class="text-xs font-bold text-accent">{{ notif.data.status?.toUpperCase() }}</span>
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs font-bold text-accent">{{ notif.data.status?.toUpperCase() }}</span>
+                            <span v-if="!notif.read_at" class="bg-green-500 text-white text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">NEW</span>
+                        </div>
                         <span class="text-[10px] text-text-muted">{{ formatDate(notif.created_at) }}</span>
                     </div>
                     <p class="text-sm text-text-primary mb-1">{{ notif.data.message }}</p>
-                    <p class="text-xs text-text-muted">Order: {{ notif.data.midtrans_order_id }}</p>
+                    <p v-if="notif.data.type === 'order'" class="text-xs text-text-muted">Order: {{ notif.data.midtrans_order_id }}</p>
+                    <p v-if="notif.data.type === 'reservation'" class="text-xs text-text-muted">Meja: {{ notif.data.table_number }}</p>
                 </div>
             </div>
         </div>

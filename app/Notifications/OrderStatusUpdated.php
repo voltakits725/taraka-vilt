@@ -32,6 +32,21 @@ class OrderStatusUpdated extends Notification implements ShouldQueue
         return ['database', 'broadcast'];
     }
 
+    private function getDynamicMessage(): string
+    {
+        if ($this->order->order_status === 'processing') {
+            return 'Pesanan kamu sedang disiapkan oleh koki!';
+        } elseif ($this->order->order_status === 'completed') {
+            if ($this->order->order_type === 'takeaway') {
+                return 'Pesanan kamu sudah siap! Silakan ambil di kasir.';
+            } else {
+                return 'Pesanan kamu sudah siap dan akan segera dihidangkan ke Meja ' . $this->order->table_number . '.';
+            }
+        }
+        
+        return 'Status pesanan kamu saat ini: ' . $this->order->order_status;
+    }
+
     /**
      * Get the array representation of the notification.
      *
@@ -40,9 +55,10 @@ class OrderStatusUpdated extends Notification implements ShouldQueue
     public function toArray(object $notifiable): array
     {
         return [
+            'type' => 'order',
             'order_id' => $this->order->id,
             'status' => $this->order->order_status,
-            'message' => 'Pesanan kamu sudah ' . $this->order->order_status,
+            'message' => $this->getDynamicMessage(),
             'midtrans_order_id' => $this->order->midtrans_order_id,
         ];
     }
@@ -53,9 +69,10 @@ class OrderStatusUpdated extends Notification implements ShouldQueue
     public function toBroadcast(object $notifiable): BroadcastMessage
     {
         return new BroadcastMessage([
+            'type' => 'order',
             'order_id' => $this->order->id,
             'status' => $this->order->order_status,
-            'message' => 'Pesanan kamu sudah ' . $this->order->order_status,
+            'message' => $this->getDynamicMessage(),
             'midtrans_order_id' => $this->order->midtrans_order_id,
         ]);
     }

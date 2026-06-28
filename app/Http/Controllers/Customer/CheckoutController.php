@@ -78,4 +78,10 @@ class CheckoutController extends Controller
         }
         return response()->json(['success' => true]);
     }
+
+    public function markAllNotificationsAsRead()
+    {
+        Auth::user()->unreadNotifications->markAsRead();
+        return response()->json(['success' => true]);
+    }
 }

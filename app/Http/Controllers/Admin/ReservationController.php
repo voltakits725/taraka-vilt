@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Reservation;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Notifications\ReservationStatusUpdated;
 
 class ReservationController extends Controller
 {
@@ -28,6 +29,11 @@ class ReservationController extends Controller
         ]);
 
         $reservation->update(['status' => $request->status]);
+
+        // Send notification to the user if they exist and the status is relevant
+        if ($reservation->user && in_array($request->status, ['confirmed', 'cancelled'])) {
+            $reservation->user->notify(new ReservationStatusUpdated($reservation));
+        }
 
         return back()->with('message', 'Status reservasi berhasil diupdate.');
     }
