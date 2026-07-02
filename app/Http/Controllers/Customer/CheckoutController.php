@@ -75,6 +75,13 @@ class CheckoutController extends Controller
 
         $order->load('orderItems.menu');
 
+        if (request()->query('format') === 'image') {
+            return view('customer.orders.bill', [
+                'order' => $order,
+                'autoDownloadImage' => true
+            ]);
+        }
+
         $pdf = Pdf::loadView('customer.orders.bill', compact('order'));
         
         return $pdf->download('E-Bill_Taraka_' . $order->midtrans_order_id . '.pdf');

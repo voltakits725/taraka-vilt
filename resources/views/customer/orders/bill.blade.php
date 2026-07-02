@@ -10,6 +10,14 @@
             font-size: 14px;
             margin: 0;
             padding: 20px;
+            background-color: #f3f4f6; /* Gray background for body */
+        }
+        .receipt-container {
+            max-width: 700px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 40px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
         .header {
             text-align: center;
@@ -81,6 +89,7 @@
 </head>
 <body>
 
+<div id="receipt-wrapper" class="receipt-container">
     <div class="header">
         <div class="logo">Taraka Cafe</div>
         <div class="subtitle">Jl. Siliwangi No.12, Bogor | IG: @taraka.cafe</div>
@@ -106,6 +115,26 @@
             <td class="info-label">Nomor Meja</td>
             <td>: {{ $order->order_type === 'takeaway' ? '-' : $order->table_number }}</td>
         </tr>
+        <tr>
+            @php
+                $pt = $order->payment_type;
+                if (str_starts_with($pt, 'bank_transfer_')) {
+                    $bank = strtoupper(str_replace('bank_transfer_', '', $pt));
+                    $paymentName = 'VA ' . $bank;
+                } elseif ($pt === 'echannel') {
+                    $paymentName = 'VA MANDIRI';
+                } elseif (in_array($pt, ['qris', 'gopay', 'shopeepay'])) {
+                    $paymentName = strtoupper($pt);
+                } elseif ($pt === 'credit_card') {
+                    $paymentName = 'KARTU KREDIT';
+                } else {
+                    $paymentName = strtoupper(str_replace('_', ' ', $pt ?: 'MIDTRANS'));
+                }
+            @endphp
+            <td class="info-label">Metode Bayar</td>
+            <td>: {{ $paymentName }}</td>
+            <td colspan="2"></td>
+        </tr>
     </table>
 
     <table class="items-table">
@@ -126,7 +155,7 @@
                     <div style="font-size: 11px; color: #666;">Sugar: {{ $item->sugar_level }}</div>
                 </td>
                 <td>{{ $item->notes ?: '-' }}</td>
-                <td class="text-right">Rp {{ number_format($item->menu->price, 0, ',', '.') }}</td>
+                <td class="text-right">Rp {{ number_format($item->subtotal / $item->quantity, 0, ',', '.') }}</td>
                 <td class="text-right">{{ $item->quantity }}</td>
                 <td class="text-right">Rp {{ number_format($item->subtotal, 0, ',', '.') }}</td>
             </tr>
@@ -154,6 +183,29 @@
         Terima kasih atas kunjungan Anda.<br>
         Simpan struk ini sebagai bukti pembayaran yang sah.
     </div>
+</div>
 
+    @if(isset($autoDownloadImage) && $autoDownloadImage)
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script>
+        window.onload = function() {
+            setTimeout(() => {
+                const element = document.getElementById('receipt-wrapper');
+                html2canvas(element, { 
+                    scale: 2,
+                    backgroundColor: '#ffffff'
+                }).then(canvas => {
+                    let link = document.createElement('a');
+                    link.download = 'E-Bill_Taraka_{{ $order->midtrans_order_id }}.png';
+                    link.href = canvas.toDataURL('image/png');
+                    link.click();
+                    
+                    // Optional: show a message or close window
+                    document.body.innerHTML = '<div style="text-align:center; padding: 50px; font-family: sans-serif;"><h2>Gambar berhasil diunduh!</h2><p>Anda dapat menutup tab ini.</p></div>';
+                });
+            }, 500); // small delay to ensure fonts load
+        };
+    </script>
+    @endif
 </body>
 </html>

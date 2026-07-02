@@ -79,6 +79,15 @@ const formatDate = (dateString) => {
         day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'
     })
 }
+
+const formatPaymentType = (pt) => {
+    if (!pt) return '-'
+    if (pt.startsWith('bank_transfer_')) return 'VA ' + pt.replace('bank_transfer_', '').toUpperCase()
+    if (pt === 'echannel') return 'VA MANDIRI'
+    if (['qris', 'gopay', 'shopeepay'].includes(pt)) return pt.toUpperCase()
+    if (pt === 'credit_card') return 'KARTU KREDIT'
+    return pt.replace('_', ' ').toUpperCase()
+}
 </script>
 
 <template>
@@ -103,10 +112,10 @@ const formatDate = (dateString) => {
                 <p class="text-text-muted mt-2">Order ID: <span class="font-bold text-text-main">{{ order.midtrans_order_id }}</span></p>
             </div>
 
-            <div class="bg-surface border border-border-theme rounded-3xl shadow-sm overflow-hidden mb-8">
+            <div ref="billCard" class="bg-surface border border-border-theme rounded-3xl shadow-sm overflow-hidden mb-8">
                 <!-- Info Status -->
                 <div class="p-6 md:p-8 border-b border-border-theme bg-surface-hover/50">
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                    <div class="grid grid-cols-2 md:grid-cols-5 gap-6">
                         <div>
                             <p class="text-xs text-text-muted uppercase tracking-wider font-bold mb-1">Status Pembayaran</p>
                             <span :class="['px-3 py-1 text-sm font-bold rounded-full border', getPaymentStatus(order.payment_status).color]">
@@ -130,6 +139,10 @@ const formatDate = (dateString) => {
                             <p class="text-xs text-text-muted uppercase tracking-wider font-bold mb-1">Total</p>
                             <p class="text-lg font-black text-accent">Rp {{ parseInt(order.total_amount).toLocaleString('id-ID') }}</p>
                         </div>
+                        <div>
+                            <p class="text-xs text-text-muted uppercase tracking-wider font-bold mb-1">Metode Bayar</p>
+                            <p class="text-lg font-black text-text-main">{{ formatPaymentType(order.payment_type) }}</p>
+                        </div>
                     </div>
                 </div>
 
@@ -139,7 +152,7 @@ const formatDate = (dateString) => {
                     <div class="space-y-4">
                         <div v-for="item in order.order_items" :key="item.id" class="flex gap-4 items-center">
                             <div class="w-16 h-16 rounded-xl overflow-hidden bg-surface-hover shrink-0">
-                                <img v-if="item.menu.image" :src="item.menu.image" :alt="item.menu.name" class="w-full h-full object-cover">
+                                <img v-if="item.menu.image" crossorigin="anonymous" :src="item.menu.image + '&cors=1'" :alt="item.menu.name" class="w-full h-full object-cover">
                                 <div v-else class="w-full h-full flex items-center justify-center text-xs text-text-muted font-bold border border-border-theme/50 rounded-xl">No Img</div>
                             </div>
                             <div class="flex-1">
@@ -166,12 +179,19 @@ const formatDate = (dateString) => {
                     {{ isPaying ? 'Membuka Pembayaran...' : 'Lanjutkan Pembayaran' }}
                 </button>
                 
-                <a v-if="order.payment_status === 'paid'" :href="`/pesanan/${order.id}/bill`" target="_blank" class="w-full py-4 bg-emerald-500 text-white rounded-full font-bold shadow-lg shadow-emerald-500/30 hover:bg-emerald-600 transition-all text-lg text-center flex items-center justify-center gap-2">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                    Download E-Bill (PDF)
-                </a>
+                <div v-if="order.payment_status === 'paid'" class="flex gap-3">
+                    <a :href="`/pesanan/${order.id}/bill`" target="_blank" class="flex-1 py-4 bg-emerald-500 text-white rounded-2xl font-bold shadow-lg shadow-emerald-500/30 hover:bg-emerald-600 transition-all text-sm md:text-base text-center flex items-center justify-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        PDF
+                    </a>
+                    
+                    <a :href="`/pesanan/${order.id}/bill?format=image`" target="_blank" class="flex-1 py-4 bg-blue-500 text-white rounded-2xl font-bold shadow-lg shadow-blue-500/30 hover:bg-blue-600 transition-all text-sm md:text-base text-center flex items-center justify-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        Gambar
+                    </a>
+                </div>
 
-                <Link href="/menu" class="w-full py-4 bg-surface border border-border-theme text-text-main rounded-full font-bold hover:bg-surface-hover transition-all text-lg text-center">
+                <Link href="/menu" class="w-full py-4 bg-surface border border-border-theme text-text-main rounded-full font-bold hover:bg-surface-hover transition-all text-lg text-center mt-2">
                     Kembali ke Menu
                 </Link>
             </div>
