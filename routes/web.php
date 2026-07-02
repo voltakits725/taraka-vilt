@@ -71,6 +71,7 @@ Route::middleware('auth')->group(function () {
     // Order & Checkout Routes
     Route::post('/checkout', [CheckoutController::class, 'checkout'])->name('customer.checkout');
     Route::get('/pesanan/{order}', [CheckoutController::class, 'status'])->name('customer.order.status');
+    Route::get('/pesanan/{order}/bill', [CheckoutController::class, 'bill'])->name('customer.order.bill');
     Route::get('/riwayat-pesanan', [CheckoutController::class, 'history'])->name('customer.order.history');
     Route::get('/notifications', [CheckoutController::class, 'notifications'])->name('customer.notifications');
     Route::post('/notifications/read-all', [CheckoutController::class, 'markAllNotificationsAsRead'])->name('customer.notifications.read-all');

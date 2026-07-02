@@ -8,6 +8,7 @@ use App\Services\Customer\CheckoutService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class CheckoutController extends Controller
 {
@@ -59,6 +60,24 @@ class CheckoutController extends Controller
         return Inertia::render('Customer/Order/History', [
             'orders' => $orders,
         ]);
+    }
+
+    public function bill(Order $order)
+    {
+        if ($order->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        // Only allow downloading bill if paid
+        if ($order->payment_status !== 'paid') {
+            abort(403, 'Order is not paid yet');
+        }
+
+        $order->load('orderItems.menu');
+
+        $pdf = Pdf::loadView('customer.orders.bill', compact('order'));
+        
+        return $pdf->download('E-Bill_Taraka_' . $order->midtrans_order_id . '.pdf');
     }
 
     public function notifications()
