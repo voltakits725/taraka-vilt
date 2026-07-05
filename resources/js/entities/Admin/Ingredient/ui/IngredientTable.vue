@@ -1,4 +1,4 @@
-<!-- resources/js/entities/ingredient/ui/IngredientTable.vue -->
+<!-- resources/js/entities/Admin/Ingredient/ui/IngredientTable.vue -->
 <script setup>
 defineProps({
     ingredients: Object

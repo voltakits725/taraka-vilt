@@ -1,4 +1,4 @@
-<!-- resources/js/entities/category/ui/CategoryTable.vue -->
+<!-- resources/js/entities/Admin/Category/ui/CategoryTable.vue -->
 <script setup>
 defineProps({
     categories: Array

@@ -1,7 +1,7 @@
 <script setup>
 import { Link } from '@inertiajs/vue3'
 import AdminLayout from '../../../shared/layouts/AdminLayout.vue'
-import MenuForm from '../../../features/menu/ui/MenuForm.vue'
+import MenuForm from '../../../features/Admin/Menu/ui/MenuForm.vue'
 
 defineProps({ categories: Array, ingredients: Array })
 </script>

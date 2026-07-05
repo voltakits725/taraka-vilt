@@ -4,8 +4,8 @@ import { ref, watch } from 'vue'
 import { router, usePage, Link } from '@inertiajs/vue3'
 import Swal from 'sweetalert2'
 import AdminLayout from '../../../shared/layouts/AdminLayout.vue'
-import IngredientTable from '../../../entities/ingredient/ui/IngredientTable.vue'
-import IngredientModal from '../../../features/ingredient/ui/IngredientModal.vue'
+import IngredientTable from '../../../entities/Admin/Ingredient/ui/IngredientTable.vue'
+import IngredientModal from '../../../features/Admin/Ingredient/ui/IngredientModal.vue'
 
 defineProps({
     ingredients: Object

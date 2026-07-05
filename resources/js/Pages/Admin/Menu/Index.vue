@@ -4,7 +4,7 @@ import { watch } from 'vue'
 import { router, Link, usePage } from '@inertiajs/vue3'
 import Swal from 'sweetalert2'
 import AdminLayout from '../../../shared/layouts/AdminLayout.vue'
-import MenuTable from '../../../entities/menu/ui/MenuTable.vue'
+import MenuTable from '../../../entities/Admin/Menu/ui/MenuTable.vue'
 
 const props = defineProps({
     menus: Object, 

@@ -3,8 +3,8 @@
 import { ref } from 'vue'
 import { router } from '@inertiajs/vue3'
 import AdminLayout from '../../../shared/layouts/AdminLayout.vue'
-import CategoryModal from '../../../features/category/ui/CategoryModal.vue'
-import CategoryTable from '../../../entities/category/ui/CategoryTable.vue'
+import CategoryModal from '../../../features/Admin/Category/ui/CategoryModal.vue'
+import CategoryTable from '../../../entities/Admin/Category/ui/CategoryTable.vue'
 
 defineProps({
     categories: Array
