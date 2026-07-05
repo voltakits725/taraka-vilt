@@ -160,7 +160,7 @@ const formatPaymentType = (pt) => {
                                     <h4 class="font-bold text-text-main">{{ item.menu.name }}</h4>
                                     <span class="font-bold text-text-main">Rp {{ parseInt(item.subtotal).toLocaleString('id-ID') }}</span>
                                 </div>
-                                <p class="text-sm text-text-muted">{{ item.quantity }}x &bull; {{ item.sugar_level }} sugar</p>
+                                <p class="text-sm text-text-muted">{{ item.quantity }}x</p>
                                 <p v-if="item.notes" class="text-xs text-text-muted italic mt-0.5">"{{ item.notes }}"</p>
                             </div>
                         </div>

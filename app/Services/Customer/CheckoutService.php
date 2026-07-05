@@ -172,7 +172,6 @@ class CheckoutService
                 'menu_id'     => $item['id'],
                 'quantity'    => $item['qty'],
                 'subtotal'    => $item['price'] * $item['qty'],
-                'sugar_level' => $this->mapSugarLevel($item['sugar'] ?? 'normal'),
                 'notes'       => $item['note'] ?? null,
             ]);
 
@@ -196,12 +195,5 @@ class CheckoutService
         return $midtransItems;
     }
 
-    private function mapSugarLevel(string $sugar): string
-    {
-        return match (strtolower($sugar)) {
-            'less', 'less sugar'  => 'less',
-            'no sugar', 'no_sugar' => 'no_sugar',
-            default                => 'normal',
-        };
-    }
+
 }

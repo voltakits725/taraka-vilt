@@ -43,6 +43,10 @@ onMounted(() => initTheme())
                     :class="$page.url.startsWith('/admin/reservations') ? 'bg-accent text-white shadow-md' : 'text-text-muted hover:bg-surface-hover hover:text-text-main'">
                     Booking Meja
                 </Link>
+                <Link href="/admin/tables" @click="isSidebarOpen = false" class="block px-4 py-3 rounded-xl font-semibold transition-all" 
+                    :class="$page.url === '/admin/tables' ? 'bg-accent text-white shadow-md' : 'text-text-muted hover:bg-surface-hover hover:text-text-main'">
+                    Master Meja
+                </Link>
                 <Link href="/admin/tables/qr" @click="isSidebarOpen = false" class="block px-4 py-3 rounded-xl font-semibold transition-all" 
                     :class="$page.url.startsWith('/admin/tables/qr') ? 'bg-accent text-white shadow-md' : 'text-text-muted hover:bg-surface-hover hover:text-text-main'">
                     Cetak QR Meja

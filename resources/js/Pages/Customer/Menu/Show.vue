@@ -64,7 +64,6 @@ const props = defineProps({
 const orderForm = ref({
     slug: props.menu.slug, 
     qty: 1,
-    sugar: 'Normal',
     note: ''
 })
 
@@ -164,22 +163,8 @@ const addToCart = () => {
                     </button>
                 </div>
 
-                <!-- Pilihan Level Gula & Catatan -->
+                <!-- Catatan -->
                 <div class="space-y-6">
-                    <!-- Level Gula -->
-                    <div>
-                        <h4 class="text-xs font-bold text-text-main mb-3 uppercase tracking-wider flex items-center gap-2">
-                            <svg class="w-4 h-4 text-accent flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
-                            Level Gula
-                        </h4>
-                        <div class="grid grid-cols-3 gap-2 sm:gap-3">
-                            <button @click="orderForm.sugar = 'Normal'" :class="['py-2.5 sm:py-3 rounded-xl font-bold border-2 text-xs sm:text-sm transition-all', orderForm.sugar === 'Normal' ? 'border-accent bg-accent/10 text-accent shadow-md shadow-accent/10' : 'border-border-theme bg-surface text-text-muted hover:border-accent/50']">Normal</button>
-                            <button @click="orderForm.sugar = 'Less'" :class="['py-2.5 sm:py-3 rounded-xl font-bold border-2 text-xs sm:text-sm transition-all', orderForm.sugar === 'Less' ? 'border-accent bg-accent/10 text-accent shadow-md shadow-accent/10' : 'border-border-theme bg-surface text-text-muted hover:border-accent/50']">Less</button>
-                            <button @click="orderForm.sugar = 'No'" :class="['py-2.5 sm:py-3 rounded-xl font-bold border-2 text-xs sm:text-sm transition-all', orderForm.sugar === 'No' ? 'border-accent bg-accent/10 text-accent shadow-md shadow-accent/10' : 'border-border-theme bg-surface text-text-muted hover:border-accent/50']">No Sugar</button>
-                        </div>
-                    </div>
-
-                    <!-- Catatan Tambahan -->
                     <div>
                         <h4 class="text-xs font-bold text-text-main mb-3 uppercase tracking-wider flex items-center gap-2">
                             <svg class="w-4 h-4 text-accent flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>

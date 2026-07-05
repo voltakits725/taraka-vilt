@@ -25,6 +25,7 @@ for (let i = 15; i <= 21; i += 2) {
 }
 
 const bookedTables = ref([])
+const occupiedTables = ref([])
 const isFetching = ref(false)
 
 const checkAvailability = async () => {
@@ -37,6 +38,7 @@ const checkAvailability = async () => {
             time: time.value
         })
         bookedTables.value = response.data.booked_tables
+        occupiedTables.value = response.data.occupied_tables
     } catch (error) {
         console.error('Error checking availability:', error)
     } finally {
@@ -57,7 +59,7 @@ const isModalOpen = ref(false)
 const selectedTable = ref(null)
 
 const openBookingModal = (tableNum) => {
-    if (bookedTables.value.includes(tableNum)) return // Cegah klik meja yg dipesan
+    if (bookedTables.value.includes(tableNum) || occupiedTables.value.includes(tableNum)) return // Cegah klik meja yg dipesan
     
     selectedTable.value = tableNum
     isModalOpen.value = true
@@ -99,6 +101,10 @@ const openBookingModal = (tableNum) => {
                     <div class="w-4 h-4 rounded-full bg-black/10 border-2 border-transparent"></div>
                     <span class="text-text-secondary">Dipesan</span>
                 </div>
+                <div class="flex items-center gap-2">
+                    <div class="w-4 h-4 rounded-full bg-orange-500/10 border-2 border-orange-500/30"></div>
+                    <span class="text-text-secondary">Terpakai</span>
+                </div>
             </div>
 
             <!-- Grid Meja -->
@@ -113,14 +119,16 @@ const openBookingModal = (tableNum) => {
                         :key="table.id" 
                         type="button" 
                         @click="openBookingModal(table.number)"
-                        :disabled="bookedTables.includes(table.number)"
+                        :disabled="bookedTables.includes(table.number) || occupiedTables.includes(table.number)"
                         :class="[
                             'relative p-6 rounded-3xl border-2 transition-all duration-300 text-center group overflow-hidden',
-                            bookedTables.includes(table.number)
-                                ? 'bg-surface/50 border-border-theme/50 opacity-60 cursor-not-allowed'
-                                : selectedTable === table.number
-                                    ? 'bg-accent/5 border-accent shadow-lg shadow-accent/20 scale-105'
-                                    : 'bg-surface border-border-theme hover:border-accent/50 hover:-translate-y-1 hover:shadow-xl hover:shadow-accent/10'
+                            occupiedTables.includes(table.number)
+                                ? 'bg-orange-500/10 border-orange-500/30 opacity-80 cursor-not-allowed'
+                                : bookedTables.includes(table.number)
+                                    ? 'bg-surface/50 border-border-theme/50 opacity-60 cursor-not-allowed'
+                                    : selectedTable === table.number
+                                        ? 'bg-accent/5 border-accent shadow-lg shadow-accent/20 scale-105'
+                                        : 'bg-surface border-border-theme hover:border-accent/50 hover:-translate-y-1 hover:shadow-xl hover:shadow-accent/10'
                         ]"
                     >
                         <div class="absolute -right-4 -top-4 w-16 h-16 bg-accent/5 rounded-full blur-2xl group-hover:bg-accent/20 transition-colors"></div>
@@ -132,13 +140,15 @@ const openBookingModal = (tableNum) => {
                         </span>
                         <span :class="[
                             'block text-[10px] font-bold tracking-widest uppercase transition-colors',
-                            bookedTables.includes(table.number)
-                                ? 'text-red-500/80'
-                                : selectedTable === table.number
-                                    ? 'text-accent'
-                                    : 'text-text-muted'
+                            occupiedTables.includes(table.number)
+                                ? 'text-orange-500'
+                                : bookedTables.includes(table.number)
+                                    ? 'text-red-500/80'
+                                    : selectedTable === table.number
+                                        ? 'text-accent'
+                                        : 'text-text-muted'
                         ]">
-                            {{ bookedTables.includes(table.number) ? 'Dipesan' : 'Tersedia' }}
+                            {{ occupiedTables.includes(table.number) ? 'Terpakai' : (bookedTables.includes(table.number) ? 'Dipesan' : 'Tersedia') }}
                         </span>
                     </button>
                 </div>

@@ -32,19 +32,6 @@ class MenuSeeder extends Seeder
         $catMains = Category::create(['slug' => 'mains', 'name' => 'Mains']);
 
         $menus = [
-            // COFFEE MOCKTAIL
-            ['name' => 'Dlima', 'description' => 'Espresso, Jus Delima dan Soda Lemon', 'price' => 28000, 'category_id' => $catCoffeeMocktail->id, 'image' => 'https://images.unsplash.com/photo-1556881286-fc6915169721?q=80&w=600&auto=format&fit=crop'],
-            ['name' => 'Sevam', 'description' => 'Espresso, Jus Apel dan Sirup Persik', 'price' => 28000, 'category_id' => $catCoffeeMocktail->id, 'image' => 'https://images.unsplash.com/photo-1549429074-ce46200fcb4d?q=80&w=600&auto=format&fit=crop'],
-            ['name' => 'Wilwa', 'description' => 'Espresso, Sirup Markisa dan Sirup Persik', 'price' => 28000, 'category_id' => $catCoffeeMocktail->id, 'image' => 'https://images.unsplash.com/photo-1497534547324-0ebb3f052e88?q=80&w=600&auto=format&fit=crop'],
-            ['name' => 'Sindhu', 'description' => 'Espresso, Jus Jeruk, Peach Syrup', 'price' => 28000, 'category_id' => $catCoffeeMocktail->id, 'image' => 'https://images.unsplash.com/photo-1563227812-0ea4c22e6cc8?q=80&w=600&auto=format&fit=crop'],
-
-            // SIGNATURES
-            ['name' => 'Para', 'description' => 'Kopi Susu Gula Aren', 'price' => 25000, 'category_id' => $catSignatures->id, 'image' => 'https://images.unsplash.com/photo-1572442388796-11668a67e53d?q=80&w=600&auto=format&fit=crop'],
-            ['name' => 'Gara', 'description' => 'Kopi Susu Madu Longan', 'price' => 26000, 'category_id' => $catSignatures->id, 'image' => 'https://images.unsplash.com/photo-1541167760496-1628856ab772?q=80&w=600&auto=format&fit=crop'],
-            ['name' => 'Tara', 'description' => 'Kopi Susu Madu dengan Sereal Bintang', 'price' => 28000, 'category_id' => $catSignatures->id, 'image' => 'https://images.unsplash.com/photo-1550906236-8e5033878b1d?q=80&w=600&auto=format&fit=crop'],
-            ['name' => 'Soma', 'description' => 'Kopi Susu Gula Aren Kacang', 'price' => 28000, 'category_id' => $catSignatures->id, 'image' => 'https://images.unsplash.com/photo-1507133750076-7fa9b2b78b54?q=80&w=600&auto=format&fit=crop'],
-            ['name' => 'Shukra', 'description' => 'Kopi Susu Blackforest', 'price' => 28000, 'category_id' => $catSignatures->id, 'image' => 'https://images.unsplash.com/photo-1624429986326-17b1ffc6104d?q=80&w=600&auto=format&fit=crop'],
-
             // CLASSIC ESPRESSO
             ['name' => 'Americano / Long Black', 'description' => 'Espresso dengan air mineral (Iced/Hot)', 'price' => 22000, 'category_id' => $catEspresso->id, 'image' => 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=600&auto=format&fit=crop'],
             ['name' => 'Cafe Latte / Cappuccino', 'description' => 'Espresso dengan susu steamed', 'price' => 25000, 'category_id' => $catEspresso->id, 'image' => 'https://images.unsplash.com/photo-1534687241285-b1a7d6541f71?q=80&w=600&auto=format&fit=crop'],
@@ -105,8 +92,6 @@ class MenuSeeder extends Seeder
         }
 
         // Simple ingredient matching
-        $this->matchIngredients('Para', ['Susu Sapi']);
-        $this->matchIngredients('Soma', ['Susu Sapi', 'Kacang Tanah']);
         $this->matchIngredients('Matcha Latte', ['Susu Sapi']);
         $this->matchIngredients('Chocolate Latte', ['Susu Sapi']);
         $this->matchIngredients('Red Velvet Latte', ['Susu Sapi']);

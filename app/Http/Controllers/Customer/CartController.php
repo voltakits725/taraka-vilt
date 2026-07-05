@@ -30,7 +30,6 @@ class CartController extends Controller
         $request->validate([
             'slug'  => 'required|exists:menus,slug',
             'qty'   => 'required|integer|min:1',
-            'sugar' => 'required|string',
             'note'  => 'nullable|string'
         ]);
 

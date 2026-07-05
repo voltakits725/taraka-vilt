@@ -16,30 +16,30 @@ class CustomerReservationService
     {
         $requestedTime = Carbon::createFromFormat('Y-m-d H:i', $date . ' ' . $time);
         
-        $bookedTables = Reservation::where('reservation_date', $date)
+        $activeReservations = Reservation::where('reservation_date', $date)
             ->whereIn('status', ['pending', 'confirmed'])
             ->get()
             ->filter(function ($reservation) use ($requestedTime) {
                 $existingTime = Carbon::createFromFormat('Y-m-d H:i:s', $reservation->reservation_date . ' ' . $reservation->reservation_time);
                 $diffInMinutes = $requestedTime->diffInMinutes($existingTime, false);
                 return abs($diffInMinutes) < 120;
-            })
-            ->pluck('table_number')
-            ->toArray();
+            });
 
-        $activeOrders = Order::where('order_type', 'dine_in')
-            ->whereIn('order_status', ['pending', 'processing'])
-            ->whereDate('created_at', $date)
-            ->get()
-            ->filter(function ($order) use ($requestedTime) {
-                $orderTime = Carbon::parse($order->created_at);
-                $diffInMinutes = $requestedTime->diffInMinutes($orderTime, false);
-                return abs($diffInMinutes) < 120;
-            })
-            ->pluck('table_number')
-            ->toArray();
+        $bookedTables = [];
+        $occupiedTables = [];
 
-        return array_values(array_unique(array_merge($bookedTables, $activeOrders)));
+        foreach ($activeReservations as $res) {
+            if ($res->notes === 'Auto-booking via Cart Checkout') {
+                $occupiedTables[] = $res->table_number;
+            } else {
+                $bookedTables[] = $res->table_number;
+            }
+        }
+
+        return [
+            'booked_tables' => array_values(array_unique(array_map('intval', $bookedTables))),
+            'occupied_tables' => array_values(array_unique(array_map('intval', $occupiedTables)))
+        ];
     }
 
     /**
@@ -61,18 +61,7 @@ class CustomerReservationService
                 return abs($diffInMinutes) < 120;
             });
 
-        $isOrderConflict = Order::where('order_type', 'dine_in')
-            ->where('table_number', $data['table_number'])
-            ->whereIn('order_status', ['pending', 'processing'])
-            ->whereDate('created_at', $date)
-            ->get()
-            ->contains(function ($order) use ($requestedTime) {
-                $orderTime = Carbon::parse($order->created_at);
-                $diffInMinutes = $requestedTime->diffInMinutes($orderTime, false);
-                return abs($diffInMinutes) < 120;
-            });
-
-        if ($isConflict || $isOrderConflict) {
+        if ($isConflict) {
             throw new \Exception('Meja ini sedang digunakan atau sudah dibooking pada jam tersebut.');
         }
 

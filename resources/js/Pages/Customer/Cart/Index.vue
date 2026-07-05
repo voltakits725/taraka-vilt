@@ -27,11 +27,11 @@ const orderType = ref('dine_in')
 const selectedTime = ref('')
 const isProcessing = ref(false)
 
-// Generate available times (10:00 - 22:00)
-const availableTimes = Array.from({ length: 13 }, (_, i) => {
-    const hour = i + 10;
-    return `${hour.toString().padStart(2, '0')}:00`;
-});
+// Generate available times (15:00 - 21:00, every 2 hours)
+const availableTimes = []
+for (let i = 15; i <= 21; i += 2) {
+    availableTimes.push(`${i}:00`)
+}
 
 const blockedTableNumbers = computed(() => {
     if (!selectedTime.value) return [];
@@ -165,8 +165,9 @@ const removeItem = (item) => {
 
 const handleCheckout = () => {
     const c = getThemeColors()
+    const isScanOrder = !!page.props.activeTable
 
-    if (orderType.value === 'dine_in' && (!tableNumber.value || !selectedTime.value)) {
+    if (orderType.value === 'dine_in' && !isScanOrder && (!tableNumber.value || !selectedTime.value)) {
         Swal.fire({
             background: c.bg,
             color: c.text,
@@ -191,11 +192,16 @@ const handleCheckout = () => {
 
     isProcessing.value = true
     
+    // Auto-fill time for QR scan orders (current hour)
+    const finalTime = isScanOrder 
+        ? new Date().getHours().toString().padStart(2, '0') + ':00' 
+        : selectedTime.value
+
     // POST request ke backend checkout
     router.post('/checkout', {
         table_number: tableNumber.value,
         order_type: orderType.value,
-        reservation_time: selectedTime.value
+        reservation_time: finalTime
     }, {
         preserveScroll: true,
         onSuccess: () => {
@@ -270,14 +276,14 @@ const handleCheckout = () => {
                 <div class="sticky top-28">
                     
                     <!-- Order Type Selector -->
-                    <div class="bg-surface border border-border-theme p-2 rounded-2xl shadow-sm mb-6 flex">
+                    <div v-if="!$page.props.activeTable" class="bg-surface border border-border-theme p-2 rounded-2xl shadow-sm mb-6 flex">
                         <button @click="orderType = 'dine_in'" :class="['flex-1 py-3 text-sm font-bold rounded-xl transition-all', orderType === 'dine_in' ? 'bg-accent text-white shadow-md' : 'text-text-muted hover:text-text-main']">Dine In</button>
                         <button @click="orderType = 'takeaway'" :class="['flex-1 py-3 text-sm font-bold rounded-xl transition-all', orderType === 'takeaway' ? 'bg-accent text-white shadow-md' : 'text-text-muted hover:text-text-main']">Take Away</button>
                     </div>
 
                     <div v-show="orderType === 'dine_in'">
                         <!-- Time Selector -->
-                        <div class="bg-surface border border-border-theme p-6 rounded-3xl shadow-sm mb-6">
+                        <div v-if="!$page.props.activeTable" class="bg-surface border border-border-theme p-6 rounded-3xl shadow-sm mb-6">
                             <h3 class="text-lg font-black text-text-main mb-1">Jam Reservasi</h3>
                             <p class="text-xs text-text-muted mb-4">Pilih jam untuk mengecek ketersediaan meja.</p>
                             <div class="grid grid-cols-4 gap-2">
@@ -298,7 +304,7 @@ const handleCheckout = () => {
                         <div v-else class="bg-surface border border-border-theme p-6 rounded-3xl shadow-sm mb-6 flex items-center justify-between">
                             <div>
                                 <p class="text-text-muted text-sm font-bold">Memesan untuk</p>
-                                <h3 class="text-xl font-black text-text-main">Meja {{ $page.props.activeTable }}</h3>
+                                <h3 class="text-xl font-black text-text-main">MEJA {{ $page.props.activeTable }} <span class="text-accent">- DINE IN</span></h3>
                             </div>
                             <div class="w-12 h-12 rounded-full bg-accent/10 flex items-center justify-center text-accent">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>

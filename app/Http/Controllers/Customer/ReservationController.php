@@ -31,10 +31,11 @@ class ReservationController extends Controller
             'time' => 'required|date_format:H:i',
         ]);
 
-        $bookedTables = $this->reservationService->checkAvailability($request->date, $request->time);
+        $availability = $this->reservationService->checkAvailability($request->date, $request->time);
 
         return response()->json([
-            'booked_tables' => $bookedTables
+            'booked_tables' => $availability['booked_tables'],
+            'occupied_tables' => $availability['occupied_tables']
         ]);
     }
 

@@ -17,7 +17,6 @@ const emit = defineEmits(['increase', 'decrease', 'remove'])
         <div class="flex flex-col flex-1 justify-center py-1">
             <h4 class="text-lg font-black text-text-main leading-tight mb-1 pr-8">{{ item.name }}</h4>
             <div class="text-sm text-text-muted font-medium mb-3">
-                {{ item.sugar }} Sugar
                 <span v-if="item.note" class="block italic text-xs mt-1">"{{ item.note }}"</span>
             </div>
             

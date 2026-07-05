@@ -59,7 +59,7 @@ class CartService
         $menu = Menu::where('slug', $data['slug'])->firstOrFail();
         $cart = session()->get('cart', []);
 
-        $cartKey = $menu->slug . '-' . md5($data['sugar'] . ($data['note'] ?? ''));
+        $cartKey = $menu->slug . '-' . md5($data['note'] ?? '');
 
         if (isset($cart[$cartKey])) {
             $cart[$cartKey]['qty'] += $data['qty'];
@@ -72,7 +72,7 @@ class CartService
                 'price'    => $menu->price,
                 'image'    => $menu->image,
                 'qty'      => $data['qty'],
-                'sugar'    => $data['sugar'],
+                'sugar'    => 'normal',
                 'note'     => $data['note'] ?? null
             ];
         }

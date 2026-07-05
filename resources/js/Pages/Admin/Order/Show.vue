@@ -116,7 +116,6 @@ const updateStatus = (newStatus) => {
                                 </div>
                                 <div class="flex items-center gap-3 mt-1">
                                     <span class="text-sm font-bold text-text-main bg-surface border border-border-theme px-2 py-0.5 rounded">{{ item.quantity }}x</span>
-                                    <span class="text-sm font-medium text-text-muted capitalize">{{ item.sugar_level.replace('_', ' ') }} Sugar</span>
                                 </div>
                                 <div v-if="item.notes" class="mt-2 text-sm text-amber-700 bg-amber-50 border border-amber-100 p-2 rounded-lg italic">
                                     "{{ item.notes }}"

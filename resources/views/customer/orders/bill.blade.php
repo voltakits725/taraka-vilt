@@ -152,7 +152,6 @@
             <tr>
                 <td>
                     <strong>{{ $item->menu->name }}</strong>
-                    <div style="font-size: 11px; color: #666;">Sugar: {{ $item->sugar_level }}</div>
                 </td>
                 <td>{{ $item->notes ?: '-' }}</td>
                 <td class="text-right">Rp {{ number_format($item->subtotal / $item->quantity, 0, ',', '.') }}</td>

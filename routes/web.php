@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\MenuController;
 use App\Http\Controllers\Admin\IngredientController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\TableController;
 
 use App\Http\Controllers\Customer\CustomerController;
 use App\Http\Controllers\Customer\CustomerAuthController;
@@ -115,4 +116,5 @@ Route::middleware('auth')->group(function () {
     Route::resource('/admin/categories', CategoryController::class)->except(['create', 'show', 'edit']);
     Route::resource('/admin/menus', MenuController::class);
     Route::resource('/admin/ingredients', IngredientController::class)->except(['create', 'show', 'edit']);
+    Route::resource('/admin/tables', TableController::class)->except(['create', 'show', 'edit']);
 });

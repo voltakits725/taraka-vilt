@@ -107,7 +107,7 @@ Tabel utama:
 - `order_items`: Detail item pesanan dari sebuah transaksi
 - `reservations`: Data pemesanan / booking meja
 - `agent_conversations`: Riwayat obrolan AI dengan pelanggan
-- `themes`: Pengaturan warna tema UI Cafe
+- `notifications`: Notifikasi untuk pengguna
 
 ---
 
@@ -149,7 +149,7 @@ erDiagram
         string name
     }
     
-    menu_ingredient {
+    ingredient_menu {
         bigint menu_id FK
         bigint ingredient_id FK
     }
@@ -171,7 +171,6 @@ erDiagram
         bigint order_id FK
         bigint menu_id FK
         integer quantity
-        string sugar_level
         string notes
     }
     
@@ -214,8 +213,8 @@ erDiagram
     users ||--o{ agent_conversations : "memiliki"
     agent_conversations ||--o{ agent_conversation_messages : "berisi"
     categories ||--o{ menus : "memiliki"
-    menus ||--o{ menu_ingredient : "terdiri dari"
-    ingredients ||--o{ menu_ingredient : "digunakan di"
+    menus ||--o{ ingredient_menu : "terdiri dari"
+    ingredients ||--o{ ingredient_menu : "digunakan di"
     orders ||--o{ order_items : "berisi"
     menus ||--o{ order_items : "dipesan di"
     tables ||--o{ orders : "digunakan untuk"
