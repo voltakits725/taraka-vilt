@@ -17,10 +17,10 @@ defineProps({
             <h1 class="text-3xl font-extrabold text-text-primary mb-2">Riwayat Pesanan</h1>
             <p class="text-text-secondary mb-6">Pantau pesanan kamu yang sedang diproses atau yang sudah lalu.</p>
 
-            <div class="bg-blue-50/50 border border-blue-200 p-4 mb-8 rounded-2xl flex gap-3 items-start">
-                <i class="fi fi-rr-info text-blue-500 mt-0.5 text-lg"></i>
-                <p class="text-sm text-blue-800 leading-relaxed">
-                    <strong class="font-bold">Info Penting:</strong> Mohon jangan menutup tab atau halaman ini selama menunggu pesanan dibuat, agar notifikasi pesanan selesai dapat masuk ke perangkat Anda.
+            <div class="bg-accent/5 border border-accent/20 p-4 mb-8 rounded-2xl flex gap-3 items-start">
+                <i class="fi fi-rr-info text-accent mt-0.5 text-lg"></i>
+                <p class="text-sm text-text-secondary leading-relaxed">
+                    <strong class="font-bold text-accent">Info Penting:</strong> Mohon jangan menutup tab atau halaman ini selama menunggu pesanan dibuat, agar notifikasi pesanan selesai dapat masuk ke perangkat Anda.
                 </p>
             </div>
             <OrderHistoryEmptyState v-if="orders.data.length === 0" />
