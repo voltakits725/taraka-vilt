@@ -113,6 +113,13 @@ const handleLogout = () => {
                                 <p class="text-xs text-text-muted mt-0.5 truncate">{{ $page.props.auth.user.email }}</p>
                             </div>
                             <div class="p-2">
+                                <Link 
+                                    href="/profil" 
+                                    class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold text-text-main hover:bg-surface-hover transition-colors mb-1"
+                                >
+                                    <svg class="w-4 h-4 text-text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                                    Profil Saya
+                                </Link>
                                 <button 
                                     @click="handleLogout" 
                                     class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold text-red-400 hover:bg-red-500/10 transition-colors"

@@ -54,9 +54,9 @@ const page = usePage()
 
         <!-- Akun: Guest → Login, Auth → User Initial -->
         <Link 
-            :href="$page.props.auth?.user ? '/cart' : '/masuk'" 
+            :href="$page.props.auth?.user ? '/profil' : '/masuk'" 
             class="flex flex-col items-center gap-1 p-2 w-14 transition-colors"
-            :class="(page.url.startsWith('/masuk') || page.url.startsWith('/daftar')) ? 'text-accent' : 'text-text-muted hover:text-text-main'"
+            :class="(page.url.startsWith('/masuk') || page.url.startsWith('/daftar') || page.url.startsWith('/profil')) ? 'text-accent' : 'text-text-muted hover:text-text-main'"
         >
             <template v-if="$page.props.auth?.user">
                 <div class="w-6 h-6 rounded-full bg-accent/20 flex items-center justify-center">

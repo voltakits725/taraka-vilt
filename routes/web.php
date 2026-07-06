@@ -74,6 +74,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/pesanan/{order}', [CheckoutController::class, 'status'])->name('customer.order.status');
     Route::get('/pesanan/{order}/bill', [CheckoutController::class, 'bill'])->name('customer.order.bill');
     Route::get('/riwayat-pesanan', [CheckoutController::class, 'history'])->name('customer.order.history');
+    Route::get('/profil', function () {
+        return Inertia::render('Customer/Profil/Index');
+    })->name('customer.profil');
     Route::get('/notifications', [CheckoutController::class, 'notifications'])->name('customer.notifications');
     Route::post('/notifications/read-all', [CheckoutController::class, 'markAllNotificationsAsRead'])->name('customer.notifications.read-all');
     Route::post('/notifications/{id}/read', [CheckoutController::class, 'markNotificationAsRead'])->name('customer.notifications.read');
