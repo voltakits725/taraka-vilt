@@ -25,9 +25,9 @@ class DatabaseSeeder extends Seeder
         }
 
        User::create([
-            'name' => 'Super Admin',
-            'email' => 'admin@cafe.com',
-            'password' => Hash::make('password123'),
+            'name' => 'Super Admin Taraka',
+            'email' => 'admin@taraka.com',
+            'password' => Hash::make('admin123'),
             'role' => 'admin', // Role khusus admin
         ]);
         
@@ -37,6 +37,11 @@ class DatabaseSeeder extends Seeder
             'email' => 'customer@mail.com',
             'password' => Hash::make('password123'),
             'role' => 'customer',
+        ]);
+
+        $this->call([
+            IngredientSeeder::class,
+            MenuSeeder::class,
         ]);
     }
 }

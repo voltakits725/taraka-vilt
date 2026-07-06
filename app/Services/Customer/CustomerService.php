@@ -12,7 +12,12 @@ class CustomerService
      */
     public function getPreviewMenus($limit = 4)
     {
-        return Menu::with('category')->latest()->take($limit)->get();
+        return Menu::with('category')
+            ->withSum('orderItems', 'quantity')
+            ->orderByDesc('order_items_sum_quantity')
+            ->latest()
+            ->take($limit)
+            ->get();
     }
 
     /**
