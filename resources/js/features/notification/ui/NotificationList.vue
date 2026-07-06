@@ -73,8 +73,12 @@ onMounted(() => {
 
     // Listen to Reverb Websocket
     if (window.Echo && props.userId) {
+        console.log("Mencoba connect ke Websocket untuk User ID:", props.userId);
+        
         window.Echo.private(`App.Models.User.${props.userId}`)
             .notification((notification) => {
+                console.log("🔥 YEAYYY NOTIFIKASI MASUK DARI WEBSOCKET!!! 🔥", notification);
+                
                 // Tambah notifikasi baru ke list
                 notifications.value.unshift({
                     id: notification.id,
