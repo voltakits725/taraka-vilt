@@ -77,4 +77,12 @@ class ReservationStatusUpdated extends Notification implements ShouldQueue
             'message' => $this->getDynamicMessage(),
         ]);
     }
+
+    /**
+     * Get the type of the notification being broadcast.
+     */
+    public function broadcastType(): string
+    {
+        return 'reservation';
+    }
 }

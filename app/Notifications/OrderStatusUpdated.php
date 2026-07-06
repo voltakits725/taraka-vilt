@@ -76,4 +76,12 @@ class OrderStatusUpdated extends Notification implements ShouldQueue
             'midtrans_order_id' => $this->order->midtrans_order_id,
         ]);
     }
+
+    /**
+     * Get the type of the notification being broadcast.
+     */
+    public function broadcastType(): string
+    {
+        return 'order';
+    }
 }
