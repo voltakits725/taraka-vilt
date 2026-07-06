@@ -15,8 +15,14 @@ defineProps({
     <CustomerLayout>
         <div class="pt-24 pb-28 px-4 md:px-8 max-w-4xl mx-auto min-h-screen">
             <h1 class="text-3xl font-extrabold text-text-primary mb-2">Riwayat Pesanan</h1>
-            <p class="text-text-secondary mb-8">Pantau pesanan kamu yang sedang diproses atau yang sudah lalu.</p>
+            <p class="text-text-secondary mb-6">Pantau pesanan kamu yang sedang diproses atau yang sudah lalu.</p>
 
+            <div class="bg-blue-50/50 border border-blue-200 p-4 mb-8 rounded-2xl flex gap-3 items-start">
+                <i class="fi fi-rr-info text-blue-500 mt-0.5 text-lg"></i>
+                <p class="text-sm text-blue-800 leading-relaxed">
+                    <strong class="font-bold">Info Penting:</strong> Mohon jangan menutup tab atau halaman ini selama menunggu pesanan dibuat, agar notifikasi pesanan selesai dapat masuk ke perangkat Anda.
+                </p>
+            </div>
             <OrderHistoryEmptyState v-if="orders.data.length === 0" />
             <OrderHistoryTable v-else :orders="orders.data" />
 
