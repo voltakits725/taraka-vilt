@@ -27,18 +27,14 @@ class ReservationController extends Controller
     {
         $request->validate([
             'date' => 'required|date',
-            'time' => 'required',
-            'table_number' => 'required|integer',
+            'time' => 'required|date_format:H:i',
         ]);
 
-        $isAvailable = $this->reservationService->isTableAvailable(
-            $request->table_number,
-            $request->date,
-            $request->time
-        );
+        $availability = $this->reservationService->checkAvailability($request->date, $request->time);
 
         return response()->json([
-            'available' => $isAvailable
+            'booked_tables' => $availability['booked_tables'],
+            'occupied_tables' => $availability['occupied_tables']
         ]);
     }
 
@@ -53,7 +49,7 @@ class ReservationController extends Controller
         ]);
 
         try {
-            $reservation = $this->reservationService->createReservation($request->all(), Auth::id());
+            $reservation = $this->reservationService->createReservation($request->all());
             return redirect()->route('customer.reservation.history')->with('message', 'Reservasi berhasil dibuat! Silakan tunggu konfirmasi Admin.');
         } catch (\Exception $e) {
             return back()->withErrors(['table_number' => $e->getMessage()]);

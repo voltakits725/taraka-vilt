@@ -25,7 +25,7 @@ class DatabaseSeeder extends Seeder
         }
 
        User::create([
-            'name' => 'Super Admin Taraka',
+            'name' => 'Admin Taraka',
             'email' => 'admin@taraka.com',
             'password' => Hash::make('admin123'),
             'role' => 'admin', // Role khusus admin
@@ -33,9 +33,9 @@ class DatabaseSeeder extends Seeder
         
         // Lo bisa tambahin seeder dummy customer di sini kalau perlu
         User::create([
-            'name' => 'Pelanggan Setia',
-            'email' => 'customer@mail.com',
-            'password' => Hash::make('password123'),
+            'name' => 'Rafly Kurniawan',
+            'email' => 'rafly@mail.com',
+            'password' => Hash::make('rafly123'),
             'role' => 'customer',
         ]);
 
