@@ -40,7 +40,7 @@ class CartService
                 ];
             });
 
-        return $bookedTablesData->merge($activeOrdersData)->toArray();
+        return $bookedTablesData->toBase()->merge($activeOrdersData->toBase())->toArray();
     }
 
     /**
