@@ -116,7 +116,8 @@ onMounted(() => {
                 if ('Notification' in window && Notification.permission === 'granted') {
                     new Notification(title, {
                         body: notification.message,
-                        icon: '/images/tarakav2.png'
+                        icon: '/images/tarakav2.png',
+                        requireInteraction: true
                     })
                 }
             })
