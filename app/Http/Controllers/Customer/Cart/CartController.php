@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Customer;
+namespace App\Http\Controllers\Customer\Cart;
 
 use App\Http\Controllers\Controller;
-use App\Services\Customer\CartService;
+use App\Services\Customer\Cart\CartService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 

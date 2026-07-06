@@ -74,8 +74,9 @@ const handleCheckout = () => {
 
     isProcessing.value = true
     
+    const now = new Date()
     const finalTime = isScanOrder 
-        ? new Date().getHours().toString().padStart(2, '0') + ':00' 
+        ? `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}` 
         : selectedTime.value
 
     router.post('/checkout', {

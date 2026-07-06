@@ -41,6 +41,8 @@ class ReservationStatusUpdated extends Notification implements ShouldQueue
             return 'Hore! Booking Meja ' . $this->reservation->table_number . ' untuk jam ' . $timeStr . ' sudah diamankan.';
         } elseif ($this->reservation->status === 'cancelled') {
             return 'Maaf, booking Meja ' . $this->reservation->table_number . ' untuk jam ' . $timeStr . ' terpaksa kami tolak/batalkan. Silakan hubungi admin.';
+        } elseif ($this->reservation->status === 'completed') {
+            return 'Terima kasih atas kunjungannya! Sesi Meja ' . $this->reservation->table_number . ' telah berakhir.';
         }
         
         return 'Status reservasi meja kamu saat ini: ' . $this->reservation->status;

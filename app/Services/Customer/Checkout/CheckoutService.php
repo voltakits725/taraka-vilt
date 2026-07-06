@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Customer;
+namespace App\Services\Customer\Checkout;
 
 use App\Models\Order;
 use App\Models\OrderItem;

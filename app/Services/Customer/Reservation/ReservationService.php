@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Services\Customer;
+namespace App\Services\Customer\Reservation;
 
 use App\Models\Reservation;
 use App\Models\Order;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
-class CustomerReservationService
+class ReservationService
 {
     /**
      * Check if a table is available at the requested date and time

@@ -8,24 +8,30 @@ use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\TableController;
 
-use App\Http\Controllers\Customer\CustomerController;
-use App\Http\Controllers\Customer\CustomerAuthController;
-use App\Http\Controllers\Customer\CartController;
-use App\Http\Controllers\Customer\CheckoutController;
+use App\Http\Controllers\Customer\Home\HomeController;
+use App\Http\Controllers\Customer\Menu\MenuController as CustomerMenuController;
+use App\Http\Controllers\Customer\Table\TableScanController;
+use App\Http\Controllers\Customer\Theme\ThemeController;
+use App\Http\Controllers\Customer\Profile\ProfileController;
+use App\Http\Controllers\Customer\Auth\CustomerAuthController;
+use App\Http\Controllers\Customer\Cart\CartController;
+use App\Http\Controllers\Customer\Checkout\CheckoutController;
+use App\Http\Controllers\Customer\Order\OrderStatusController;
+use App\Http\Controllers\Customer\Order\OrderHistoryController;
+use App\Http\Controllers\Customer\Order\OrderBillController;
+use App\Http\Controllers\Customer\Notification\NotificationController;
+use App\Http\Controllers\Customer\Reservation\ReservationController as CustomerReservationController;
+use App\Http\Controllers\Customer\Reservation\ReservationHistoryController;
 use App\Http\Controllers\MidtransWebhookController;
-use App\Http\Controllers\Customer\ReservationController as CustomerReservationController;
 use App\Http\Controllers\Admin\ReservationController as AdminReservationController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-
-
-
 // Routes untuk Area Pelanggan (Public)
-Route::get('/', [CustomerController::class, 'index'])->name('customer.home');
-Route::get('/scan/{table}', [CustomerController::class, 'scanQr'])->name('scan.qr');
-Route::get('/menu', [CustomerController::class, 'menu'])->name('customer.menu');
-Route::get('/theme', [CustomerController::class, 'theme'])->name('customer.theme');
-Route::get('/menu/{slug}', [CustomerController::class, 'show'])->name('customer.menu.show');
+Route::get('/', HomeController::class)->name('customer.home');
+Route::get('/scan/{table}', TableScanController::class)->name('scan.qr');
+Route::get('/menu', [CustomerMenuController::class, 'index'])->name('customer.menu');
+Route::get('/theme', ThemeController::class)->name('customer.theme');
+Route::get('/menu/{slug}', [CustomerMenuController::class, 'show'])->name('customer.menu.show');
 
 // AI Chat Vue Page
 Route::get('/ai-chat', function () {
@@ -67,19 +73,24 @@ Route::middleware('auth')->group(function () {
     Route::get('/reservasi', [CustomerReservationController::class, 'index'])->name('customer.reservation.index');
     Route::post('/reservasi/check', [CustomerReservationController::class, 'checkAvailability'])->name('customer.reservation.check');
     Route::post('/reservasi', [CustomerReservationController::class, 'store'])->name('customer.reservation.store');
-    Route::get('/riwayat-reservasi', [CustomerReservationController::class, 'history'])->name('customer.reservation.history');
+    Route::get('/riwayat-reservasi', ReservationHistoryController::class)->name('customer.reservation.history');
 
     // Order & Checkout Routes
     Route::post('/checkout', [CheckoutController::class, 'checkout'])->name('customer.checkout');
-    Route::get('/pesanan/{order}', [CheckoutController::class, 'status'])->name('customer.order.status');
-    Route::get('/pesanan/{order}/bill', [CheckoutController::class, 'bill'])->name('customer.order.bill');
-    Route::get('/riwayat-pesanan', [CheckoutController::class, 'history'])->name('customer.order.history');
-    Route::get('/profil', function () {
-        return Inertia::render('Customer/Profil/Index');
-    })->name('customer.profil');
-    Route::get('/notifications', [CheckoutController::class, 'notifications'])->name('customer.notifications');
-    Route::post('/notifications/read-all', [CheckoutController::class, 'markAllNotificationsAsRead'])->name('customer.notifications.read-all');
-    Route::post('/notifications/{id}/read', [CheckoutController::class, 'markNotificationAsRead'])->name('customer.notifications.read');
+    Route::get('/pesanan/{order}', OrderStatusController::class)->name('customer.order.status');
+    Route::get('/pesanan/{order}/bill', OrderBillController::class)->name('customer.order.bill');
+    Route::get('/riwayat-pesanan', OrderHistoryController::class)->name('customer.order.history');
+    
+    Route::post('/leave-table', function (\Illuminate\Http\Request $request) {
+        $request->session()->forget('table_number');
+        return back();
+    })->name('customer.leave_table');
+    
+    Route::get('/profil', ProfileController::class)->name('customer.profil');
+    
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('customer.notifications');
+    Route::post('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('customer.notifications.read-all');
+    Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('customer.notifications.read');
 });
 
 // Auth Admin (Guest Only)

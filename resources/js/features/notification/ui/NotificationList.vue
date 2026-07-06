@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, onBeforeUnmount, computed } from 'vue'
 import { Link, router } from '@inertiajs/vue3'
 import axios from 'axios'
 
@@ -102,6 +102,9 @@ onMounted(() => {
                         title = 'Booking Diterima!'
                     } else if (notification.status === 'cancelled') {
                         title = 'Booking Ditolak'
+                    } else if (notification.status === 'completed') {
+                        title = 'Sesi Selesai'
+                        router.post('/leave-table', {}, { preserveScroll: true })
                     }
                 }
 
@@ -113,6 +116,12 @@ onMounted(() => {
                     })
                 }
             })
+    }
+})
+
+onBeforeUnmount(() => {
+    if (window.Echo && props.userId) {
+        window.Echo.leave(`App.Models.User.${props.userId}`)
     }
 })
 

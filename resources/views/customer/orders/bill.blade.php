@@ -163,14 +163,17 @@
     </table>
 
     <table class="summary-table">
-        <!-- Assuming tax is included or calculated. For Taraka we haven't explicitly separated tax in DB yet, but we can show Subtotal = Total as tax inclusive if needed. Or we just show Total. -->
+        @php
+            $actualSubtotal = $order->orderItems->sum('subtotal');
+            $taxNominal = $order->total_amount - $actualSubtotal;
+        @endphp
         <tr>
             <td>Subtotal</td>
-            <td class="text-right">Rp {{ number_format($order->total_amount, 0, ',', '.') }}</td>
+            <td class="text-right">Rp {{ number_format($actualSubtotal, 0, ',', '.') }}</td>
         </tr>
         <tr>
-            <td>Tax (PB1 10%)</td>
-            <td class="text-right">Termasuk</td>
+            <td>Pajak (10%)</td>
+            <td class="text-right">Rp {{ number_format($taxNominal, 0, ',', '.') }}</td>
         </tr>
         <tr class="summary-total">
             <td>TOTAL</td>

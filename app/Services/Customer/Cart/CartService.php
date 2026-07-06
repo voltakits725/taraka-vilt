@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Customer;
+namespace App\Services\Customer\Cart;
 
 use App\Models\Menu;
 use App\Models\Reservation;

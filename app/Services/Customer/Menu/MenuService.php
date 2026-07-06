@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Services\Customer;
+namespace App\Services\Customer\Menu;
 
 use App\Models\Menu;
 use App\Models\Category;
 
-class CustomerService
+class MenuService
 {
     /**
      * Get preview menus for homepage

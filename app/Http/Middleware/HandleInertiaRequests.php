@@ -42,7 +42,40 @@ class HandleInertiaRequests extends Middleware
             'flash' => [
                 'message' => fn () => $request->session()->get('message')
             ],
-            'activeTable' => fn () => $request->session()->get('table_number'),
+            'activeTable' => function () use ($request) {
+                $table = $request->session()->get('table_number');
+                if (!$table) return null;
+
+                $user = $request->user();
+                if ($user) {
+                    $activeCount = \App\Models\Reservation::where('user_id', $user->id)
+                        ->where('table_number', $table)
+                        ->where('reservation_date', \Carbon\Carbon::now()->toDateString())
+                        ->whereIn('status', ['pending', 'confirmed'])
+                        ->count();
+
+                    if ($activeCount === 0) {
+                        $lastCompleted = \App\Models\Reservation::where('user_id', $user->id)
+                            ->where('table_number', $table)
+                            ->where('reservation_date', \Carbon\Carbon::now()->toDateString())
+                            ->where('status', 'completed')
+                            ->orderBy('updated_at', 'desc')
+                            ->first();
+
+                        if ($lastCompleted) {
+                            $scanTime = $request->session()->get('table_scan_time', 0);
+                            // Jika waktu scan QR LEBIH LAMA dari waktu reservasi selesai di-update, berarti sesinya kadaluarsa
+                            if ($scanTime < $lastCompleted->updated_at->timestamp) {
+                                $request->session()->forget('table_number');
+                                $request->session()->forget('table_scan_time');
+                                return null;
+                            }
+                        }
+                    }
+                }
+                
+                return $table;
+            },
             'cartCount' => function () {
                 $cart = session()->get('cart', []);
                 // Ngitung total keseluruhan jumlah (qty) barang

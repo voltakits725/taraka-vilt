@@ -31,7 +31,7 @@ class ReservationController extends Controller
         $reservation->update(['status' => $request->status]);
 
         // Send notification to the user if they exist and the status is relevant
-        if ($reservation->user && in_array($request->status, ['confirmed', 'cancelled'])) {
+        if ($reservation->user && in_array($request->status, ['confirmed', 'cancelled', 'completed'])) {
             $reservation->user->notify(new ReservationStatusUpdated($reservation));
         }
 
