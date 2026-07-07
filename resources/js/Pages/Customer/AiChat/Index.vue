@@ -2,7 +2,6 @@
 import { ref, onMounted, nextTick } from 'vue'
 import { Link, usePage } from '@inertiajs/vue3'
 import TopNavbar from '../../../widgets/navbar/ui/TopNavbar.vue'
-import BottomNavbar from '../../../widgets/navbar/ui/BottomNavbar.vue'
 import axios from 'axios'
 import Swal from 'sweetalert2'
 
@@ -200,8 +199,6 @@ onMounted(() => {
             </div>
             </div>
         </main>
-        
-        <BottomNavbar />
     </div>
 </template>
 

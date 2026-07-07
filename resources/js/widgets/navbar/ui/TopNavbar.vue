@@ -4,6 +4,7 @@ import { Link, usePage, router } from '@inertiajs/vue3'
 import { ref } from 'vue'
 import { useTheme } from '../../../shared/composables/useTheme'
 import NotificationList from '../../../features/notification/ui/NotificationList.vue'
+import MobileSidebar from './MobileSidebar.vue'
 
 defineProps({
     isHome: Boolean,
@@ -13,6 +14,7 @@ defineProps({
 const { currentTheme } = useTheme()
 const page = usePage()
 const showUserMenu = ref(false)
+const showSidebar = ref(false)
 
 const handleLogout = () => {
     const user = page.props.auth?.user
@@ -25,24 +27,31 @@ const handleLogout = () => {
 </script>
 
 <template>
-    <header class="h-20 fixed top-0 w-full z-50 flex items-center justify-between px-6 md:px-12 bg-surface border-b border-border-theme shadow-sm transition-colors duration-500">
+    <header class="h-20 fixed top-0 w-full z-50 flex items-center justify-between px-4 md:px-12 bg-surface border-b border-border-theme shadow-sm transition-colors duration-500">
 
-        <!-- Logo + Brand Name -->
-        <Link href="/" class="group flex items-center gap-3 hover:opacity-90 transition-opacity duration-300">
+        <div class="flex items-center gap-3">
+            <!-- Hamburger Button (Mobile Only) -->
+            <button @click="showSidebar = true" class="md:hidden p-2 -ml-2 text-text-main hover:text-accent transition-colors">
+                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
 
-            <!-- Logo Image -->
-            <img
-                src="/images/taraka.png"
-                alt="Taraka Logo"
-                class="h-10 w-10 object-contain select-none"
-                draggable="false"
-            >
+            <!-- Logo + Brand Name -->
+            <Link href="/" class="group flex items-center gap-2 hover:opacity-90 transition-opacity duration-300">
 
-            <!-- Brand Name — Cormorant Garamond -->
-            <span class="font-brand text-text-main leading-none select-none" style="font-family: 'Cormorant Garamond', Georgia, serif;">
-                <span class="text-[28px] md:text-[32px] font-semibold tracking-wide">Taraka</span><span class="text-accent text-[28px] md:text-[32px] font-light">.</span>
-            </span>
-        </Link>
+                <!-- Logo Image -->
+                <img
+                    src="/images/taraka.png"
+                    alt="Taraka Logo"
+                    class="h-9 w-9 md:h-10 md:w-10 object-contain select-none"
+                    draggable="false"
+                >
+
+                <!-- Brand Name — Cormorant Garamond -->
+                <span class="font-brand text-text-main leading-none select-none" style="font-family: 'Cormorant Garamond', Georgia, serif;">
+                    <span class="text-[24px] md:text-[32px] font-semibold tracking-wide">Taraka</span><span class="text-accent text-[24px] md:text-[32px] font-light">.</span>
+                </span>
+            </Link>
+        </div>
 
         <!-- Navigasi Tengah -->
         <nav class="hidden md:flex items-center gap-8 font-bold text-sm">
@@ -149,4 +158,7 @@ const handleLogout = () => {
             </template>
         </div>
     </header>
+
+    <!-- Mobile Sidebar Component -->
+    <MobileSidebar :show="showSidebar" @close="showSidebar = false" />
 </template>

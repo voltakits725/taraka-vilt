@@ -8,7 +8,6 @@ import 'aos/dist/aos.css'
 
 // Import Widgets yang udah kita pisah
 import TopNavbar from '../../widgets/navbar/ui/TopNavbar.vue'
-import BottomNavbar from '../../widgets/navbar/ui/BottomNavbar.vue'
 
 const { initTheme } = useTheme()
 const page = usePage()
@@ -28,7 +27,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="min-h-screen bg-base font-sans transition-colors duration-500 flex flex-col relative pb-20 md:pb-0" style="color: var(--text-main)">
+    <div class="min-h-screen bg-base font-sans transition-colors duration-500 flex flex-col relative" style="color: var(--text-main)">
         
         <!-- Panggil Widget TopNavbar -->
         <TopNavbar :is-home="isHome" :is-scrolled="isScrolled" />
@@ -47,9 +46,6 @@ onMounted(() => {
                 <p class="text-text-muted text-xs font-medium">&copy; 2026 Cafe Taraka. All rights reserved.</p>
             </div>
         </footer>
-
-        <!-- Panggil Widget BottomNavbar -->
-        <BottomNavbar />
         
     </div>
 </template>
