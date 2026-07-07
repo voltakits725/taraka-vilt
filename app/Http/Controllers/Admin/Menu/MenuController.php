@@ -1,5 +1,5 @@
 <?php
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Admin\Menu;
 
 use App\Http\Controllers\Controller;
 use App\Models\Menu;
@@ -7,7 +7,7 @@ use App\Models\Category;
 use App\Models\Ingredient;
 use App\Http\Requests\Admin\StoreMenuRequest;
 use App\Http\Requests\Admin\UpdateMenuRequest;
-use App\Services\Admin\MenuService;
+use App\Services\Admin\Menu\MenuService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 

@@ -1,7 +1,7 @@
 <?php
 
 // app/Http/Controllers/Admin/AuthController.php
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Admin\Auth;
 
 use App\Http\Controllers\Controller; // Wajib di-import karena beda folder
 use App\Models\User;

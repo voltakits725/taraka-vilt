@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Admin;
+namespace App\Services\Admin\Menu;
 
 use App\Models\Menu;
 use Illuminate\Support\Str;

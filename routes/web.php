@@ -1,12 +1,13 @@
 <?php
 
-use App\Http\Controllers\Admin\AuthController;
-use App\Http\Controllers\Admin\CategoryController;
-use App\Http\Controllers\Admin\MenuController;
-use App\Http\Controllers\Admin\IngredientController;
-use App\Http\Controllers\Admin\OrderController;
-use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\TableController;
+use App\Http\Controllers\Admin\Auth\AuthController;
+use App\Http\Controllers\Admin\Category\CategoryController;
+use App\Http\Controllers\Admin\Menu\MenuController;
+use App\Http\Controllers\Admin\Ingredient\IngredientController;
+use App\Http\Controllers\Admin\Order\OrderController;
+use App\Http\Controllers\Admin\Dashboard\DashboardController;
+use App\Http\Controllers\Admin\Table\TableController;
+use App\Http\Controllers\Admin\Reservation\ReservationController as AdminReservationController;
 
 use App\Http\Controllers\Customer\Home\HomeController;
 use App\Http\Controllers\Customer\Menu\MenuController as CustomerMenuController;
@@ -23,7 +24,6 @@ use App\Http\Controllers\Customer\Notification\NotificationController;
 use App\Http\Controllers\Customer\Reservation\ReservationController as CustomerReservationController;
 use App\Http\Controllers\Customer\Reservation\ReservationHistoryController;
 use App\Http\Controllers\MidtransWebhookController;
-use App\Http\Controllers\Admin\ReservationController as AdminReservationController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 // Routes untuk Area Pelanggan (Public)
