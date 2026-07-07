@@ -93,7 +93,7 @@ class ReservationService
             'reservation_time' => $data['reservation_time'],
             'guest_count' => $data['guest_count'],
             'notes' => $data['notes'] ?? null,
-            'status' => 'pending', // Menunggu bayar DP
+            'status' => 'pending', // Menunggu pembayaran
             'midtrans_order_id' => $midtransOrderId,
             'payment_status' => 'unpaid'
         ]);
@@ -105,10 +105,10 @@ class ReservationService
             ],
             'item_details' => [
                 [
-                    'id'       => 'DP-RES-TBL',
+                    'id'       => 'RES-TBL',
                     'price'    => $bookingFee,
                     'quantity' => 1,
-                    'name'     => 'DP Booking Meja ' . $data['table_number'],
+                    'name'     => 'Biaya Booking Meja ' . $data['table_number'],
                 ]
             ],
             'customer_details' => [
@@ -135,7 +135,7 @@ class ReservationService
         $reservation = Reservation::where('id', $id)->where('user_id', Auth::id())->firstOrFail();
 
         if ($reservation->status !== 'confirmed') {
-            throw new \Exception('Hanya reservasi yang sudah dikonfirmasi (Lunas DP) yang bisa diubah jadwalnya.');
+            throw new \Exception('Hanya reservasi yang sudah dikonfirmasi (Lunas) yang bisa diubah jadwalnya.');
         }
 
         // Cek konflik di tanggal/waktu baru, kecualikan reservasi ini sendiri

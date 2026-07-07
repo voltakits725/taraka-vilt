@@ -63,7 +63,7 @@ defineEmits(['updateStatus'])
                             </span>
                         </td>
                         <td class="py-4 px-6">
-                            <span v-if="res.payment_status === 'unpaid'" class="text-red-600 font-bold bg-red-50 px-2 py-1 rounded-md text-[10px]">BLM DP</span>
+                            <span v-if="res.payment_status === 'unpaid'" class="text-red-600 font-bold bg-red-50 px-2 py-1 rounded-md text-[10px]">BELUM BAYAR</span>
                             <span v-else-if="res.payment_status === 'paid'" class="text-emerald-600 font-bold bg-emerald-50 px-2 py-1 rounded-md text-[10px]">LUNAS</span>
                             <span v-else class="text-text-muted font-bold text-[10px]">{{ res.payment_status?.toUpperCase() || '-' }}</span>
                         </td>

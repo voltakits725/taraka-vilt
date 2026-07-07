@@ -50,7 +50,7 @@ class ReservationController extends Controller
 
         try {
             $reservation = $this->reservationService->createReservation($request->all());
-            return redirect()->route('customer.reservation.history')->with('message', 'Silakan selesaikan pembayaran DP Booking Meja (Rp 20.000).');
+            return redirect()->route('customer.reservation.history')->with('message', 'Silakan selesaikan Pembayaran Booking Meja (Rp 20.000).');
         } catch (\Exception $e) {
             return back()->withErrors(['table_number' => $e->getMessage()]);
         }

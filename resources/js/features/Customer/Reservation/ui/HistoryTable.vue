@@ -68,14 +68,14 @@ const submitReschedule = () => {
                             </span>
                         </td>
                         <td class="py-4 px-6 whitespace-nowrap">
-                            <span v-if="res.payment_status === 'unpaid'" class="text-red-500 font-bold bg-red-50 px-2 py-1 rounded-md text-xs">BELUM BAYAR DP</span>
-                            <span v-else-if="res.payment_status === 'paid'" class="text-emerald-600 font-bold bg-emerald-50 px-2 py-1 rounded-md text-xs">DP LUNAS</span>
+                            <span v-if="res.payment_status === 'unpaid'" class="text-red-500 font-bold bg-red-50 px-2 py-1 rounded-md text-xs">BELUM BAYAR</span>
+                            <span v-else-if="res.payment_status === 'paid'" class="text-emerald-600 font-bold bg-emerald-50 px-2 py-1 rounded-md text-xs">LUNAS</span>
                             <span v-else class="text-text-muted font-bold text-xs">{{ res.payment_status?.toUpperCase() || '-' }}</span>
                         </td>
                         <td class="py-4 px-6 whitespace-nowrap">
                             <button v-if="res.payment_status === 'unpaid' && res.status !== 'cancelled'" @click="$emit('pay', res.snap_token)"
                                 class="px-4 py-2 bg-accent text-white text-xs font-bold rounded-xl hover:opacity-90 shadow-sm transition-all mr-2">
-                                Bayar DP (Rp 20.000)
+                                Bayar (Rp 20.000)
                             </button>
                             
                             <button v-if="res.status === 'confirmed'" @click="openRescheduleModal(res)"
