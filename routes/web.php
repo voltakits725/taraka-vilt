@@ -73,6 +73,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/reservasi', [CustomerReservationController::class, 'index'])->name('customer.reservation.index');
     Route::post('/reservasi/check', [CustomerReservationController::class, 'checkAvailability'])->name('customer.reservation.check');
     Route::post('/reservasi', [CustomerReservationController::class, 'store'])->name('customer.reservation.store');
+    Route::post('/reservasi/{id}/reschedule', [CustomerReservationController::class, 'reschedule'])->name('customer.reservation.reschedule');
     Route::get('/riwayat-reservasi', ReservationHistoryController::class)->name('customer.reservation.history');
 
     // Order & Checkout Routes

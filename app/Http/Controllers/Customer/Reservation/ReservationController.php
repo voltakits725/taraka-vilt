@@ -50,9 +50,24 @@ class ReservationController extends Controller
 
         try {
             $reservation = $this->reservationService->createReservation($request->all());
-            return redirect()->route('customer.reservation.history')->with('message', 'Reservasi berhasil dibuat! Silakan tunggu konfirmasi Admin.');
+            return redirect()->route('customer.reservation.history')->with('message', 'Silakan selesaikan pembayaran DP Booking Meja (Rp 20.000).');
         } catch (\Exception $e) {
             return back()->withErrors(['table_number' => $e->getMessage()]);
+        }
+    }
+
+    public function reschedule(Request $request, $id)
+    {
+        $request->validate([
+            'new_date' => 'required|date',
+            'new_time' => 'required|date_format:H:i',
+        ]);
+
+        try {
+            $this->reservationService->rescheduleReservation($id, $request->new_date, $request->new_time);
+            return back()->with('message', 'Jadwal reservasi berhasil diubah!');
+        } catch (\Exception $e) {
+            return back()->withErrors(['reschedule' => $e->getMessage()]);
         }
     }
 }

@@ -15,7 +15,8 @@ class ReservationHistoryController extends Controller
             'reservations' => Reservation::where('user_id', Auth::id())
                 ->orderBy('reservation_date', 'desc')
                 ->orderBy('reservation_time', 'desc')
-                ->paginate(10)
+                ->paginate(10),
+            'midtransClientKey' => config('services.midtrans.client_key')
         ]);
     }
 }

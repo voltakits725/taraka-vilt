@@ -1,12 +1,35 @@
 <script setup>
-import { Head, Link } from '@inertiajs/vue3'
+import { Head, Link, router } from '@inertiajs/vue3'
 import CustomerLayout from '../../../shared/layouts/CustomerLayout.vue'
 import HistoryEmptyState from '../../../features/Customer/Reservation/ui/HistoryEmptyState.vue'
 import HistoryTable from '../../../features/Customer/Reservation/ui/HistoryTable.vue'
 
-defineProps({
-    reservations: Object
+import { onMounted } from 'vue'
+
+const props = defineProps({
+    reservations: Object,
+    midtransClientKey: String
 })
+
+onMounted(() => {
+    if (props.midtransClientKey && !document.getElementById('midtrans-snap-script')) {
+        const script = document.createElement('script')
+        script.id = 'midtrans-snap-script'
+        script.src = 'https://app.sandbox.midtrans.com/snap/snap.js'
+        script.setAttribute('data-client-key', props.midtransClientKey)
+        document.head.appendChild(script)
+    }
+})
+
+const handlePay = (snapToken) => {
+    if (!snapToken) return alert('Payment token not found!')
+    window.snap.pay(snapToken, {
+        onSuccess: () => router.reload(),
+        onPending: () => router.reload(),
+        onError: () => router.reload(),
+        onClose: () => router.reload(),
+    })
+}
 </script>
 
 <template>
@@ -26,7 +49,7 @@ defineProps({
 
             <HistoryEmptyState v-if="reservations.data.length === 0" />
 
-            <HistoryTable v-else :reservations="reservations.data" />
+            <HistoryTable v-else :reservations="reservations.data" @pay="handlePay" />
 
             <!-- Pagination (if more than 10) -->
             <div v-if="reservations.links.length > 3" class="mt-8 flex justify-center gap-2">

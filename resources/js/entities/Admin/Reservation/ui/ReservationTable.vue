@@ -19,13 +19,14 @@ defineEmits(['updateStatus'])
                         <th class="py-3 px-6 font-semibold">Tanggal & Jam</th>
                         <th class="py-3 px-6 font-semibold text-center">Pax</th>
                         <th class="py-3 px-6 font-semibold">Catatan</th>
-                        <th class="py-3 px-6 font-semibold">Status</th>
+                        <th class="py-3 px-6 font-semibold">Status Reservasi</th>
+                        <th class="py-3 px-6 font-semibold">Pembayaran</th>
                         <th class="py-3 px-6 font-semibold text-right">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-border-theme">
                     <tr v-if="reservations.data.length === 0">
-                        <td colspan="7" class="py-10 text-center text-text-muted">
+                        <td colspan="8" class="py-10 text-center text-text-muted">
                             Belum ada data reservasi meja.
                         </td>
                     </tr>
@@ -60,6 +61,11 @@ defineEmits(['updateStatus'])
                             ]">
                                 {{ res.status.toUpperCase() }}
                             </span>
+                        </td>
+                        <td class="py-4 px-6">
+                            <span v-if="res.payment_status === 'unpaid'" class="text-red-600 font-bold bg-red-50 px-2 py-1 rounded-md text-[10px]">BLM DP</span>
+                            <span v-else-if="res.payment_status === 'paid'" class="text-emerald-600 font-bold bg-emerald-50 px-2 py-1 rounded-md text-[10px]">LUNAS</span>
+                            <span v-else class="text-text-muted font-bold text-[10px]">{{ res.payment_status?.toUpperCase() || '-' }}</span>
                         </td>
                         <td class="py-4 px-6 text-right">
                             <div v-if="res.status === 'pending'" class="flex justify-end gap-2">

@@ -17,6 +17,9 @@ class Reservation extends Model
         'status',
         'guest_count',
         'notes',
+        'midtrans_order_id',
+        'snap_token',
+        'payment_status',
     ];
 
     public function user()
