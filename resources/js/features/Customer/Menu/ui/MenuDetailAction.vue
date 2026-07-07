@@ -35,8 +35,8 @@ defineEmits(['add-to-cart'])
 
     <!-- Mobile Fixed Bar: di atas BottomNavbar -->
     <Teleport to="body">
-        <div class="md:hidden fixed bottom-16 left-0 right-0 z-40 bg-surface/95 backdrop-blur-md border-t border-border-theme px-4 py-3">
-            <div class="flex items-center gap-3 max-w-7xl mx-auto">
+        <div class="md:hidden fixed bottom-16 left-0 right-0 z-40 bg-surface/95 backdrop-blur-md border-t border-border-theme px-4 py-3 shadow-lg">
+            <div class="flex items-center gap-4 max-w-7xl mx-auto">
                 <div class="flex items-center bg-surface-hover border border-border-theme rounded-full p-1 flex-shrink-0">
                     <button @click="qty > 1 && qty--" class="w-10 h-10 rounded-full bg-surface shadow-sm flex items-center justify-center text-text-main hover:text-accent transition-colors font-bold text-xl">-</button>
                     <span class="w-10 text-center font-black text-text-main text-lg">{{ qty }}</span>

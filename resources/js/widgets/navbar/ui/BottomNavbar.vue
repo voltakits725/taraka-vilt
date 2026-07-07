@@ -38,19 +38,7 @@ const page = usePage()
             <span class="text-[10px] font-bold">Tanya AI</span>
         </Link>
 
-        <Link href="/theme" class="flex flex-col items-center gap-1 p-2 w-14 transition-colors" :class="page.url.startsWith('/theme') ? 'text-accent' : 'text-text-muted hover:text-text-main'">
-            <div class="w-6 h-6 flex items-center justify-center">
-                <div class="w-5 h-5 rounded-full border-[2px] border-current" :style="{ backgroundColor: currentTheme.colors.accent }"></div>
-            </div>
-            <span class="text-[10px] font-bold">Tema</span>
-        </Link>
 
-        <Link v-if="$page.props.auth?.user" href="/riwayat-pesanan" class="flex flex-col items-center gap-1 p-2 w-14 transition-colors" :class="page.url.startsWith('/riwayat') ? 'text-accent' : 'text-text-muted hover:text-text-main'">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-            </svg>
-            <span class="text-[10px] font-bold">Riwayat</span>
-        </Link>
 
         <!-- Akun: Guest → Login, Auth → User Initial -->
         <Link 
