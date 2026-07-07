@@ -8,7 +8,7 @@ defineProps({
 </script>
 
 <template>
-    <div class="menu-card group relative bg-surface border border-border-theme rounded-2xl sm:rounded-3xl overflow-hidden flex flex-col transition-all duration-400 hover:shadow-2xl hover:-translate-y-2 hover:border-accent/40">
+    <Link :href="`/menu/${menu.slug}`" class="menu-card group relative bg-surface border border-border-theme rounded-2xl sm:rounded-3xl overflow-hidden flex flex-col transition-all duration-400 hover:shadow-2xl hover:-translate-y-2 hover:border-accent/40">
 
         <!-- Image Container -->
         <div class="relative overflow-hidden bg-surface-hover aspect-square sm:aspect-[4/3]">
@@ -43,12 +43,12 @@ defineProps({
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                     </svg>
                     Lihat Detail
-                </Link>
+                </span>
             </div>
         </div>
 
         <!-- Content -->
-        <Link :href="`/menu/${menu.slug}`" class="p-3 sm:p-5 flex flex-col flex-1">
+        <div class="p-3 sm:p-5 flex flex-col flex-1">
             <h4 class="text-sm sm:text-base font-bold leading-tight mb-0.5 sm:mb-1 line-clamp-2" style="color: var(--text-main)">{{ menu.name }}</h4>
 
             <p v-if="menu.description" class="hidden sm:block text-xs leading-relaxed mb-3 line-clamp-2" style="color: var(--text-muted)">{{ menu.description }}</p>
@@ -65,8 +65,8 @@ defineProps({
                     <span class="hidden sm:inline">Pesan</span>
                 </span>
             </div>
-        </Link>
-    </div>
+        </div>
+    </Link>
 </template>
 
 <style scoped>
