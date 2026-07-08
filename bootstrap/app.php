@@ -32,8 +32,8 @@ return Application::configure(basePath: dirname(__DIR__))
         // Redirect authenticated users yang akses halaman guest
         $middleware->redirectUsersTo(function (Request $request) {
             $role = $request->user()?->role;
-            if ($role === 'barista') return '/admin/orders';
-            if (in_array($role, ['owner', 'admin'])) return '/admin/dashboard';
+            if (in_array($role, ['barista', 'admin'])) return '/admin/orders';
+            if ($role === 'owner') return '/admin/dashboard';
             return '/';
         });
 

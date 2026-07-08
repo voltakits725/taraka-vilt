@@ -32,7 +32,7 @@ class AuthController extends Controller
             $userRole = Auth::user()->role;
             
             if (in_array($userRole, ['owner', 'admin', 'barista'])) {
-                if ($userRole === 'barista') {
+                if (in_array($userRole, ['barista', 'admin'])) {
                     return redirect()->intended('/admin/orders');
                 }
                 return redirect()->intended('/admin/dashboard');

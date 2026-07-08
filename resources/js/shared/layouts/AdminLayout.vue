@@ -31,7 +31,7 @@ onMounted(() => initTheme())
             </div>
             
             <nav class="flex-1 p-4 space-y-2 mt-4 overflow-y-auto">
-                <Link v-if="['owner', 'admin'].includes(user.role)" href="/admin/dashboard" @click="isSidebarOpen = false" class="block px-4 py-3 rounded-xl font-semibold transition-all" 
+                <Link v-if="user.role === 'owner'" href="/admin/dashboard" @click="isSidebarOpen = false" class="block px-4 py-3 rounded-xl font-semibold transition-all" 
                     :class="$page.url === '/admin/dashboard' ? 'bg-accent text-white shadow-md' : 'text-text-muted hover:bg-surface-hover hover:text-text-main'">
                     Dashboard
                 </Link>

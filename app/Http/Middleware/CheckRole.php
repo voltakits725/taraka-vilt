@@ -16,11 +16,11 @@ class CheckRole
     public function handle(Request $request, Closure $next, string ...$roles): Response
     {
         if (! $request->user() || ! in_array($request->user()->role, $roles)) {
-            // Jika role tidak sesuai, lemparkan ke dashboard kalau admin/barista/owner, atau ke home kalau customer
+            // Jika role tidak sesuai, lemparkan ke dashboard kalau owner, atau ke orders kalau admin/barista, atau ke home kalau customer
             $userRole = $request->user()?->role;
             if (in_array($userRole, ['owner', 'admin', 'barista'])) {
-                if ($userRole === 'barista') {
-                    return redirect()->route('admin.orders'); // Barista langsung ke orders
+                if (in_array($userRole, ['barista', 'admin'])) {
+                    return redirect()->route('admin.orders');
                 }
                 return redirect()->route('admin.dashboard');
             }
