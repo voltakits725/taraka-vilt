@@ -15,6 +15,7 @@ use App\Http\Controllers\Customer\Table\TableScanController;
 use App\Http\Controllers\Customer\Theme\ThemeController;
 use App\Http\Controllers\Customer\Profile\ProfileController;
 use App\Http\Controllers\Customer\Auth\CustomerAuthController;
+use App\Http\Controllers\Customer\Auth\GoogleAuthController;
 use App\Http\Controllers\Customer\Cart\CartController;
 use App\Http\Controllers\Customer\Checkout\CheckoutController;
 use App\Http\Controllers\Customer\Order\OrderStatusController;
@@ -58,6 +59,10 @@ Route::middleware('guest')->group(function () {
     Route::post('/masuk', [CustomerAuthController::class, 'login']);
     Route::get('/daftar', [CustomerAuthController::class, 'showRegister'])->name('customer.register');
     Route::post('/daftar', [CustomerAuthController::class, 'register']);
+
+    // Google Auth Routes
+    Route::get('/auth/google', [GoogleAuthController::class, 'redirect'])->name('google.login');
+    Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback'])->name('google.callback');
 });
 
 // Area Pelanggan yang butuh login
