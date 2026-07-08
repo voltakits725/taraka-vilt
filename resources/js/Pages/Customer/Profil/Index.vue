@@ -1,13 +1,17 @@
 <script setup>
+import { ref } from 'vue'
 import { Head, Link, usePage } from '@inertiajs/vue3'
 import CustomerLayout from '../../../shared/layouts/CustomerLayout.vue'
 
 // FSD Components
 import ProfileHeader from '../../../features/Customer/Profil/ui/ProfileHeader.vue'
 import ProfileMenu from '../../../features/Customer/Profil/ui/ProfileMenu.vue'
+import EditProfileModal from '../../../features/Customer/Profil/ui/EditProfileModal.vue'
 
 const page = usePage()
 const user = page.props.auth.user
+
+const showEditModal = ref(false)
 </script>
 
 <template>
@@ -21,7 +25,7 @@ const user = page.props.auth.user
                 <p class="text-text-secondary">Kelola akun dan pengaturan preferensi kamu.</p>
             </div>
 
-            <ProfileHeader :user="user" />
+            <ProfileHeader :user="user" @edit-profile="showEditModal = true" />
             
             <ProfileMenu />
 
@@ -32,5 +36,10 @@ const user = page.props.auth.user
             </Link>
 
         </div>
+
+        <EditProfileModal 
+            :show="showEditModal" 
+            @close="showEditModal = false" 
+        />
     </CustomerLayout>
 </template>

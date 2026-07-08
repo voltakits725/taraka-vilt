@@ -57,8 +57,7 @@ Route::post('/api/midtrans/callback', [MidtransWebhookController::class, 'handle
 Route::middleware('guest')->group(function () {
     Route::get('/masuk', [CustomerAuthController::class, 'showLogin'])->name('customer.login');
     Route::post('/masuk', [CustomerAuthController::class, 'login']);
-    Route::get('/daftar', [CustomerAuthController::class, 'showRegister'])->name('customer.register');
-    Route::post('/daftar', [CustomerAuthController::class, 'register']);
+    Route::redirect('/daftar', '/masuk');
 
     // Google Auth Routes
     Route::get('/auth/google', [GoogleAuthController::class, 'redirect'])->name('google.login');
@@ -92,7 +91,8 @@ Route::middleware('auth')->group(function () {
         return back();
     })->name('customer.leave_table');
     
-    Route::get('/profil', ProfileController::class)->name('customer.profil');
+    Route::get('/profil', [ProfileController::class, 'index'])->name('customer.profil');
+    Route::post('/profil', [ProfileController::class, 'update'])->name('customer.profil.update');
     
     Route::get('/notifications', [NotificationController::class, 'index'])->name('customer.notifications');
     Route::post('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('customer.notifications.read-all');
