@@ -14,6 +14,8 @@ const form = useForm({
     name: '',
     is_allergen: false,
     allergen_type: '',
+    stock: 0,
+    unit: 'gram',
 })
 
 const allergenKeywords = {
@@ -31,11 +33,15 @@ watch(() => props.show, (isOpen) => {
             form.name = props.ingredient.name
             form.is_allergen = props.ingredient.is_allergen ? true : false
             form.allergen_type = props.ingredient.allergen_type || ''
+            form.stock = props.ingredient.stock || 0
+            form.unit = props.ingredient.unit || 'gram'
         } else {
             form.reset()
             form.name = ''
             form.is_allergen = false
             form.allergen_type = ''
+            form.stock = 0
+            form.unit = 'gram'
         }
         form.clearErrors()
     }
@@ -86,6 +92,25 @@ const submit = () => {
                     <input v-model="form.name" type="text" placeholder="Contoh: Susu Sapi, Kacang Almond..." required 
                         class="w-full px-4 py-2 rounded-lg bg-base border border-border-theme text-text-main focus:border-accent outline-none transition-colors">
                     <span v-if="form.errors.name" class="text-red-500 text-xs mt-1 block">{{ form.errors.name }}</span>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-semibold text-text-main mb-1">Sisa Stok</label>
+                        <input v-model="form.stock" type="number" min="0" required 
+                            class="w-full px-4 py-2 rounded-lg bg-base border border-border-theme text-text-main focus:border-accent outline-none transition-colors">
+                        <span v-if="form.errors.stock" class="text-red-500 text-xs mt-1 block">{{ form.errors.stock }}</span>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-text-main mb-1">Satuan</label>
+                        <select v-model="form.unit" required 
+                            class="w-full px-4 py-2 rounded-lg bg-base border border-border-theme text-text-main focus:border-accent outline-none transition-colors">
+                            <option value="gram">Gram (gr)</option>
+                            <option value="ml">Mililiter (ml)</option>
+                            <option value="pcs">Pcs / Buah</option>
+                        </select>
+                        <span v-if="form.errors.unit" class="text-red-500 text-xs mt-1 block">{{ form.errors.unit }}</span>
+                    </div>
                 </div>
 
                 <div class="flex items-center gap-3 bg-surface-hover p-4 rounded-xl border border-border-theme transition-colors">

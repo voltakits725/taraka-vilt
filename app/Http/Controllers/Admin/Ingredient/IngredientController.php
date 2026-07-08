@@ -25,6 +25,8 @@ class IngredientController extends Controller
             'name' => 'required|string|max:255|unique:ingredients,name',
             'is_allergen' => 'boolean',
             'allergen_type' => 'nullable|string|max:255', // misal: Kacang, Susu, Seafood
+            'stock' => 'required|integer|min:0',
+            'unit' => 'required|string|in:gr,ml,pcs',
         ]);
 
         Ingredient::create($validated);
@@ -38,6 +40,8 @@ class IngredientController extends Controller
             'name' => 'required|string|max:255|unique:ingredients,name,' . $ingredient->id,
             'is_allergen' => 'boolean',
             'allergen_type' => 'nullable|string|max:255',
+            'stock' => 'required|integer|min:0',
+            'unit' => 'required|string|in:gr,ml,pcs',
         ]);
 
         // Jika bukan alergen, pastikan tipe alergennya dikosongkan

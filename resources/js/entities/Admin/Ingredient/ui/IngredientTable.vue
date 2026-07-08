@@ -15,6 +15,7 @@ defineEmits(['edit', 'delete'])
                     <tr class="bg-surface-hover border-b border-border-theme text-text-muted text-sm uppercase tracking-wider">
                         <th class="py-4 px-6 font-bold w-20">No</th>
                         <th class="py-4 px-6 font-bold">Nama Bahan</th>
+                        <th class="py-4 px-6 font-bold">Sisa Stok</th>
                         <th class="py-4 px-6 font-bold">Status Alergen</th>
                         <th class="py-4 px-6 font-bold text-right">Aksi</th>
                     </tr>
@@ -22,7 +23,7 @@ defineEmits(['edit', 'delete'])
                 <tbody>
                     <!-- State Kosong -->
                     <tr v-if="ingredients.data.length === 0">
-                        <td colspan="4" class="py-12 text-center text-text-muted italic">Belum ada master data bahan.</td>
+                        <td colspan="5" class="py-12 text-center text-text-muted italic">Belum ada master data bahan.</td>
                     </tr>
                     
                     <!-- Looping Data Bahan -->
@@ -36,6 +37,13 @@ defineEmits(['edit', 'delete'])
                         
                         <!-- Nama Bahan -->
                         <td class="py-4 px-6 font-bold text-text-main text-lg">{{ item.name }}</td>
+                        
+                        <!-- Sisa Stok -->
+                        <td class="py-4 px-6 font-semibold">
+                            <span :class="item.stock <= 0 ? 'text-red-500 bg-red-500/10 px-2 py-1 rounded-md' : 'text-text-main'">
+                                {{ item.stock }} <span class="text-xs uppercase text-text-muted ml-1">{{ item.unit }}</span>
+                            </span>
+                        </td>
                         
                         <!-- Status Alergen -->
                         <td class="py-4 px-6">

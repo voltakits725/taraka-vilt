@@ -27,8 +27,9 @@ class UpdateMenuRequest extends FormRequest
             'price' => 'required|numeric|min:0',
             'description' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
-            'ingredient_ids' => 'nullable|array',
-            'ingredient_ids.*' => 'exists:ingredients,id',
+            'ingredients' => 'nullable|array',
+            'ingredients.*.id' => 'required|exists:ingredients,id',
+            'ingredients.*.amount' => 'required|integer|min:1',
         ];
     }
 }

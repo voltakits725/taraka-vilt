@@ -17,7 +17,7 @@ const form = useForm({
     price: props.menu?.price || '',
     description: props.menu?.description || '',
     image: null,
-    ingredient_ids: props.menu?.ingredients ? props.menu.ingredients.map(i => i.id) : [],
+    ingredients: props.menu?.ingredients ? props.menu.ingredients.map(i => ({ id: i.id, amount: i.pivot.amount })) : [],
 })
 
 // Fungsi handle upload & generate live preview
@@ -39,6 +39,31 @@ const submit = () => {
         })).post(`/admin/menus/${props.menu.slug}`)
     } else {
         form.post('/admin/menus')
+    }
+}
+
+const toggleIngredient = (ing) => {
+    const idx = form.ingredients.findIndex(i => i.id === ing.id)
+    if (idx !== -1) {
+        form.ingredients.splice(idx, 1)
+    } else {
+        form.ingredients.push({ id: ing.id, amount: 1 })
+    }
+}
+
+const isIngredientSelected = (id) => {
+    return form.ingredients.some(i => i.id === id)
+}
+
+const getIngredientAmount = (id) => {
+    const ing = form.ingredients.find(i => i.id === id)
+    return ing ? ing.amount : 1
+}
+
+const updateIngredientAmount = (id, amount) => {
+    const idx = form.ingredients.findIndex(i => i.id === id)
+    if (idx !== -1) {
+        form.ingredients[idx].amount = parseInt(amount) || 1
     }
 }
 </script>
@@ -94,20 +119,31 @@ const submit = () => {
         </div>
 
         <div class="mt-8 pt-6 border-t border-border-theme">
-            <label class="block text-sm font-bold text-text-main mb-3">Komposisi Bahan & Alergen</label>
-            <div class="grid grid-cols-2 md:grid-cols-3 gap-3 p-4 bg-base border border-border-theme rounded-2xl max-h-48 overflow-y-auto">
+            <label class="block text-sm font-bold text-text-main mb-3">Komposisi Bahan & Alergen (Resep)</label>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 p-4 bg-base border border-border-theme rounded-2xl max-h-64 overflow-y-auto">
                 
-                <label v-for="ing in ingredients" :key="ing.id" class="flex items-center gap-3 cursor-pointer p-2 hover:bg-surface-hover rounded-xl transition-all border border-transparent hover:border-border-theme">
-                    <input type="checkbox" :value="ing.id" v-model="form.ingredient_ids" 
-                        class="w-4 h-4 rounded border-border-theme focus:ring-accent bg-surface" :style="{ color: 'var(--color-accent)' }">
+                <div v-for="ing in ingredients" :key="ing.id" 
+                    class="flex items-center justify-between gap-3 p-3 hover:bg-surface-hover rounded-xl transition-all border"
+                    :class="isIngredientSelected(ing.id) ? 'border-accent bg-accent/5' : 'border-transparent'">
                     
-                    <span class="text-sm text-text-main font-medium">
-                        {{ ing.name }}
-                        <span v-if="ing.is_allergen" class="ml-1 text-[10px] bg-red-500/10 text-red-500 px-1.5 py-0.5 rounded-md font-bold border border-red-500/20">
-                            {{ ing.allergen_type }}
+                    <label class="flex items-center gap-3 cursor-pointer flex-1">
+                        <input type="checkbox" :checked="isIngredientSelected(ing.id)" @change="toggleIngredient(ing)" 
+                            class="w-4 h-4 rounded border-border-theme focus:ring-accent bg-surface" :style="{ color: 'var(--color-accent)' }">
+                        
+                        <span class="text-sm text-text-main font-bold">
+                            {{ ing.name }}
+                            <span v-if="ing.is_allergen" class="ml-1 text-[10px] bg-red-500/10 text-red-500 px-1.5 py-0.5 rounded-md font-bold border border-red-500/20">
+                                {{ ing.allergen_type }}
+                            </span>
                         </span>
-                    </span>
-                </label>
+                    </label>
+
+                    <div v-if="isIngredientSelected(ing.id)" class="flex items-center gap-2">
+                        <input type="number" min="1" :value="getIngredientAmount(ing.id)" @input="updateIngredientAmount(ing.id, $event.target.value)"
+                            class="w-16 px-2 py-1 text-sm bg-surface border border-border-theme rounded-lg focus:border-accent outline-none text-center">
+                        <span class="text-xs font-semibold text-text-muted">{{ ing.unit }}</span>
+                    </div>
+                </div>
 
             </div>
         </div>

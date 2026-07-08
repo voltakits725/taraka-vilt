@@ -48,6 +48,21 @@ class OrderController extends Controller
             'order_status' => $request->order_status,
         ]);
 
+        // Deduct stock if order is being processed and hasn't been deducted yet
+        if (in_array($request->order_status, ['processing', 'completed']) && !$order->is_stock_deducted) {
+            $order->load('orderItems.menu.ingredients');
+            foreach ($order->orderItems as $item) {
+                if ($item->menu && $item->menu->ingredients) {
+                    foreach ($item->menu->ingredients as $ingredient) {
+                        $amountNeeded = $ingredient->pivot->amount * $item->quantity;
+                        // Deduct stock, ensuring it doesn't go below 0 if we want to be safe
+                        $ingredient->decrement('stock', $amountNeeded);
+                    }
+                }
+            }
+            $order->update(['is_stock_deducted' => true]);
+        }
+
         if ($order->user) {
             $order->user->notify(new \App\Notifications\OrderStatusUpdated($order));
         }

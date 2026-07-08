@@ -124,6 +124,8 @@ Route::middleware(['auth', 'role:owner,admin,barista'])->group(function () {
     Route::get('/admin/reservations', [AdminReservationController::class, 'index'])->name('admin.reservations');
     Route::patch('/admin/reservations/{reservation}/status', [AdminReservationController::class, 'updateStatus'])->name('admin.reservations.update-status');
 
+    Route::resource('/admin/ingredients', IngredientController::class)->except(['create', 'show', 'edit']);
+
     // HANYA Owner yang bisa akses ini
     Route::middleware(['role:owner'])->group(function () {
         Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
@@ -140,7 +142,6 @@ Route::middleware(['auth', 'role:owner,admin,barista'])->group(function () {
 
         Route::resource('/admin/categories', CategoryController::class)->except(['create', 'show', 'edit']);
         Route::resource('/admin/menus', MenuController::class);
-        Route::resource('/admin/ingredients', IngredientController::class)->except(['create', 'show', 'edit']);
         Route::resource('/admin/tables', TableController::class)->except(['create', 'show', 'edit']);
     });
 });

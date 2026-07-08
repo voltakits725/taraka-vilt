@@ -35,8 +35,12 @@ class MenuService
             'image' => $imageUrl,
         ]);
 
-        if (isset($data['ingredient_ids'])) {
-            $menu->ingredients()->sync($data['ingredient_ids']);
+        if (isset($data['ingredients'])) {
+            $syncData = [];
+            foreach ($data['ingredients'] as $ingredient) {
+                $syncData[$ingredient['id']] = ['amount' => $ingredient['amount']];
+            }
+            $menu->ingredients()->sync($syncData);
         }
 
         return $menu;
@@ -63,8 +67,12 @@ class MenuService
             'image' => $imageUrl,
         ]);
 
-        if (isset($data['ingredient_ids'])) {
-            $menu->ingredients()->sync($data['ingredient_ids']);
+        if (isset($data['ingredients'])) {
+            $syncData = [];
+            foreach ($data['ingredients'] as $ingredient) {
+                $syncData[$ingredient['id']] = ['amount' => $ingredient['amount']];
+            }
+            $menu->ingredients()->sync($syncData);
         } else {
             $menu->ingredients()->detach();
         }

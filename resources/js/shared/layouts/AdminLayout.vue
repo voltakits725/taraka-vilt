@@ -60,11 +60,11 @@ onMounted(() => initTheme())
                         :class="$page.url.startsWith('/admin/menus') ? 'bg-accent text-white shadow-md' : 'text-text-muted hover:bg-surface-hover hover:text-text-main'">
                         Master Menu
                     </Link>
-                    <Link href="/admin/ingredients" @click="isSidebarOpen = false" class="block px-4 py-3 rounded-xl font-semibold transition-all" 
-                        :class="$page.url.startsWith('/admin/ingredients') ? 'bg-accent text-white shadow-md' : 'text-text-muted hover:bg-surface-hover hover:text-text-main'">
-                        Master Bahan
-                    </Link>
                 </template>
+                <Link href="/admin/ingredients" @click="isSidebarOpen = false" class="block px-4 py-3 rounded-xl font-semibold transition-all" 
+                    :class="$page.url.startsWith('/admin/ingredients') ? 'bg-accent text-white shadow-md' : 'text-text-muted hover:bg-surface-hover hover:text-text-main'">
+                    Master Bahan
+                </Link>
 
                 <div v-if="user.role === 'owner'" class="pt-4 mt-2 border-t border-border-theme">
                     <Link href="/admin/employees" @click="isSidebarOpen = false" class="block px-4 py-3 rounded-xl font-semibold transition-all" 
