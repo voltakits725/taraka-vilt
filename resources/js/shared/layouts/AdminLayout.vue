@@ -26,12 +26,12 @@ onMounted(() => initTheme())
                 </div>
                 <div class="flex flex-col min-w-0">
                     <span class="text-sm font-bold text-text-main leading-none truncate">{{ user.name }}</span>
-                    <span class="text-[10px] font-semibold text-text-muted uppercase tracking-wider mt-1">Administrator</span>
+                    <span class="text-[10px] font-semibold text-text-muted uppercase tracking-wider mt-1">{{ user.role }}</span>
                 </div>
             </div>
             
             <nav class="flex-1 p-4 space-y-2 mt-4 overflow-y-auto">
-                <Link href="/admin/dashboard" @click="isSidebarOpen = false" class="block px-4 py-3 rounded-xl font-semibold transition-all" 
+                <Link v-if="['owner', 'admin'].includes(user.role)" href="/admin/dashboard" @click="isSidebarOpen = false" class="block px-4 py-3 rounded-xl font-semibold transition-all" 
                     :class="$page.url === '/admin/dashboard' ? 'bg-accent text-white shadow-md' : 'text-text-muted hover:bg-surface-hover hover:text-text-main'">
                     Dashboard
                 </Link>
@@ -43,26 +43,28 @@ onMounted(() => initTheme())
                     :class="$page.url.startsWith('/admin/reservations') ? 'bg-accent text-white shadow-md' : 'text-text-muted hover:bg-surface-hover hover:text-text-main'">
                     Booking Meja
                 </Link>
-                <Link href="/admin/tables" @click="isSidebarOpen = false" class="block px-4 py-3 rounded-xl font-semibold transition-all" 
-                    :class="$page.url === '/admin/tables' ? 'bg-accent text-white shadow-md' : 'text-text-muted hover:bg-surface-hover hover:text-text-main'">
-                    Master Meja
-                </Link>
-                <Link href="/admin/tables/qr" @click="isSidebarOpen = false" class="block px-4 py-3 rounded-xl font-semibold transition-all" 
-                    :class="$page.url.startsWith('/admin/tables/qr') ? 'bg-accent text-white shadow-md' : 'text-text-muted hover:bg-surface-hover hover:text-text-main'">
-                    Cetak QR Meja
-                </Link>
-                <Link href="/admin/categories" @click="isSidebarOpen = false" class="block px-4 py-3 rounded-xl font-semibold transition-all" 
-                    :class="$page.url.startsWith('/admin/categories') ? 'bg-accent text-white shadow-md' : 'text-text-muted hover:bg-surface-hover hover:text-text-main'">
-                    Kategori Menu
-                </Link>
-                <Link href="/admin/menus" @click="isSidebarOpen = false" class="block px-4 py-3 rounded-xl font-semibold transition-all" 
-                    :class="$page.url.startsWith('/admin/menus') ? 'bg-accent text-white shadow-md' : 'text-text-muted hover:bg-surface-hover hover:text-text-main'">
-                    Master Menu
-                </Link>
-                <Link href="/admin/ingredients" @click="isSidebarOpen = false" class="block px-4 py-3 rounded-xl font-semibold transition-all" 
-                    :class="$page.url.startsWith('/admin/ingredients') ? 'bg-accent text-white shadow-md' : 'text-text-muted hover:bg-surface-hover hover:text-text-main'">
-                    Master Bahan
-                </Link>
+                <template v-if="['owner', 'admin'].includes(user.role)">
+                    <Link href="/admin/tables" @click="isSidebarOpen = false" class="block px-4 py-3 rounded-xl font-semibold transition-all" 
+                        :class="$page.url === '/admin/tables' ? 'bg-accent text-white shadow-md' : 'text-text-muted hover:bg-surface-hover hover:text-text-main'">
+                        Master Meja
+                    </Link>
+                    <Link href="/admin/tables/qr" @click="isSidebarOpen = false" class="block px-4 py-3 rounded-xl font-semibold transition-all" 
+                        :class="$page.url.startsWith('/admin/tables/qr') ? 'bg-accent text-white shadow-md' : 'text-text-muted hover:bg-surface-hover hover:text-text-main'">
+                        Cetak QR Meja
+                    </Link>
+                    <Link href="/admin/categories" @click="isSidebarOpen = false" class="block px-4 py-3 rounded-xl font-semibold transition-all" 
+                        :class="$page.url.startsWith('/admin/categories') ? 'bg-accent text-white shadow-md' : 'text-text-muted hover:bg-surface-hover hover:text-text-main'">
+                        Kategori Menu
+                    </Link>
+                    <Link href="/admin/menus" @click="isSidebarOpen = false" class="block px-4 py-3 rounded-xl font-semibold transition-all" 
+                        :class="$page.url.startsWith('/admin/menus') ? 'bg-accent text-white shadow-md' : 'text-text-muted hover:bg-surface-hover hover:text-text-main'">
+                        Master Menu
+                    </Link>
+                    <Link href="/admin/ingredients" @click="isSidebarOpen = false" class="block px-4 py-3 rounded-xl font-semibold transition-all" 
+                        :class="$page.url.startsWith('/admin/ingredients') ? 'bg-accent text-white shadow-md' : 'text-text-muted hover:bg-surface-hover hover:text-text-main'">
+                        Master Bahan
+                    </Link>
+                </template>
                 
                 <div class="pt-4 mt-2 border-t border-border-theme">
                     <Link href="/admin/theme" @click="isSidebarOpen = false" class="block px-4 py-3 rounded-xl font-semibold transition-all" 

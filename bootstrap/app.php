@@ -20,15 +20,22 @@ return Application::configure(basePath: dirname(__DIR__))
             HandleInertiaRequests::class,
         ]);
 
+        $middleware->alias([
+            'role' => \App\Http\Middleware\CheckRole::class,
+        ]);
+
         // Redirect unauthenticated users ke halaman login pelanggan
         $middleware->redirectGuestsTo(fn (Request $request) => 
             $request->is('admin/*') ? route('login') : route('customer.login')
         );
 
         // Redirect authenticated users yang akses halaman guest
-        $middleware->redirectUsersTo(fn (Request $request) => 
-            $request->user()?->role === 'admin' ? '/admin/dashboard' : '/'
-        );
+        $middleware->redirectUsersTo(function (Request $request) {
+            $role = $request->user()?->role;
+            if ($role === 'barista') return '/admin/orders';
+            if (in_array($role, ['owner', 'admin'])) return '/admin/dashboard';
+            return '/';
+        });
 
         // Kecualikan route webhook Midtrans dari pengecekan CSRF
         $middleware->validateCsrfTokens(except: [

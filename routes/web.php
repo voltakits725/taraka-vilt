@@ -108,33 +108,34 @@ Route::middleware('guest')->group(function () {
     Route::post('/admin/register', [AuthController::class, 'register']);
 });
 
-// Rute untuk Admin yang sudah login (Auth)
-Route::middleware('auth')->group(function () {
+// Rute untuk Karyawan (Owner, Admin, Barista)
+Route::middleware(['auth', 'role:owner,admin,barista'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     
-    Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
-    Route::get('/admin/dashboard/export', [DashboardController::class, 'exportPdf'])->name('admin.dashboard.export');
-
+    // Barista, Admin, Owner bisa akses ini
     Route::get('/admin/theme', function () {
         return inertia('Admin/Theme/Index');
     });
 
-    // Admin Order Management
     Route::get('/admin/orders', [OrderController::class, 'index'])->name('admin.orders');
     Route::get('/admin/orders/{order}', [OrderController::class, 'show'])->name('admin.orders.show');
     Route::patch('/admin/orders/{order}/status', [OrderController::class, 'updateStatus'])->name('admin.orders.update-status');
 
-    // Admin Reservation Management
     Route::get('/admin/reservations', [AdminReservationController::class, 'index'])->name('admin.reservations');
     Route::patch('/admin/reservations/{reservation}/status', [AdminReservationController::class, 'updateStatus'])->name('admin.reservations.update-status');
 
-    // Admin Table QR
-    Route::get('/admin/tables/qr', function () {
-        return Inertia::render('Admin/Table/QrCodes');
-    })->name('admin.tables.qr');
+    // HANYA Admin dan Owner yang bisa akses ini
+    Route::middleware(['role:owner,admin'])->group(function () {
+        Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+        Route::get('/admin/dashboard/export', [DashboardController::class, 'exportPdf'])->name('admin.dashboard.export');
 
-    Route::resource('/admin/categories', CategoryController::class)->except(['create', 'show', 'edit']);
-    Route::resource('/admin/menus', MenuController::class);
-    Route::resource('/admin/ingredients', IngredientController::class)->except(['create', 'show', 'edit']);
-    Route::resource('/admin/tables', TableController::class)->except(['create', 'show', 'edit']);
+        Route::get('/admin/tables/qr', function () {
+            return Inertia::render('Admin/Table/QrCodes');
+        })->name('admin.tables.qr');
+
+        Route::resource('/admin/categories', CategoryController::class)->except(['create', 'show', 'edit']);
+        Route::resource('/admin/menus', MenuController::class);
+        Route::resource('/admin/ingredients', IngredientController::class)->except(['create', 'show', 'edit']);
+        Route::resource('/admin/tables', TableController::class)->except(['create', 'show', 'edit']);
+    });
 });

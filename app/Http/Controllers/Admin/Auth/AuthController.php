@@ -29,15 +29,19 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
             
-            // Cek role, pastikan hanya admin yang bisa masuk portal ini
-            if (Auth::user()->role === 'admin') {
+            $userRole = Auth::user()->role;
+            
+            if (in_array($userRole, ['owner', 'admin', 'barista'])) {
+                if ($userRole === 'barista') {
+                    return redirect()->intended('/admin/orders');
+                }
                 return redirect()->intended('/admin/dashboard');
             }
             
             // Kalau pelanggan nyasar login di sini, tendang ke depan atau logout
             Auth::logout();
             return back()->withErrors([
-                'email' => 'Akses ditolak. Ini khusus admin.',
+                'email' => 'Akses ditolak. Ini khusus admin/pegawai.',
             ]);
         }
 
