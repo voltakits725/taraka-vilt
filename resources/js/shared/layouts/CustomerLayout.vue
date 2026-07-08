@@ -47,15 +47,21 @@ onMounted(() => {
                     <p class="text-text-secondary text-sm leading-relaxed">
                         Jl. Klungkung No.1, RW.Perumnas 3, Bencongan Indah, Kecamatan Kelapa Dua, Kabupaten Tangerang, Banten 15810
                     </p>
-                    <a 
-                        href="https://www.google.com/maps/place/Kopi+Taraka+Tangerang/@-6.2127735,106.5962449,17z/data=!4m6!3m5!1s0x2e69ff06706616a7:0xff59ce49c87af96f!8m2!3d-6.2127578!4d106.5963394!16s%2Fg%2F11qqcmdnsq?entry=ttu&g_ep=EgoyMDI2MDcwNS4wIKXMDSoASAFQAw%3D%3D" 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        class="inline-flex items-center gap-1.5 text-accent hover:text-accent-hover text-sm font-bold transition-colors"
-                    >
+                    <div class="flex items-center justify-center gap-2 text-text-muted text-sm font-medium pt-1">
+                        <svg class="w-4 h-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        Buka setiap hari: 16:00 - 00:00 WIB
+                    </div>
+                    <div class="pt-2">
+                        <a 
+                            href="https://www.google.com/maps/place/Kopi+Taraka+Tangerang/@-6.2127735,106.5962449,17z/data=!4m6!3m5!1s0x2e69ff06706616a7:0xff59ce49c87af96f!8m2!3d-6.2127578!4d106.5963394!16s%2Fg%2F11qqcmdnsq?entry=ttu&g_ep=EgoyMDI2MDcwNS4wIKXMDSoASAFQAw%3D%3D" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            class="inline-flex items-center gap-1.5 text-accent hover:text-accent-hover text-sm font-bold transition-colors"
+                        >
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                         Lihat di Google Maps
-                    </a>
+                        </a>
+                    </div>
                 </div>
 
                 <div class="w-full h-px bg-border-theme my-4"></div>
