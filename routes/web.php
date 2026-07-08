@@ -124,10 +124,11 @@ Route::middleware(['auth', 'role:owner,admin,barista'])->group(function () {
     Route::get('/admin/reservations', [AdminReservationController::class, 'index'])->name('admin.reservations');
     Route::patch('/admin/reservations/{reservation}/status', [AdminReservationController::class, 'updateStatus'])->name('admin.reservations.update-status');
 
-    // HANYA Owner yang bisa akses ini (Laporan Keuangan)
+    // HANYA Owner yang bisa akses ini
     Route::middleware(['role:owner'])->group(function () {
         Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
         Route::get('/admin/dashboard/export', [DashboardController::class, 'exportPdf'])->name('admin.dashboard.export');
+        Route::resource('/admin/employees', \App\Http\Controllers\Admin\Employee\EmployeeController::class)->except(['create', 'show', 'edit']);
     });
 
     // Admin dan Owner bisa akses Master Data

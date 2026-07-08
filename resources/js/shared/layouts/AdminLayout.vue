@@ -65,6 +65,13 @@ onMounted(() => initTheme())
                         Master Bahan
                     </Link>
                 </template>
+
+                <div v-if="user.role === 'owner'" class="pt-4 mt-2 border-t border-border-theme">
+                    <Link href="/admin/employees" @click="isSidebarOpen = false" class="block px-4 py-3 rounded-xl font-semibold transition-all" 
+                        :class="$page.url.startsWith('/admin/employees') ? 'bg-accent text-white shadow-md' : 'text-text-muted hover:bg-surface-hover hover:text-text-main'">
+                        Manajemen Karyawan
+                    </Link>
+                </div>
                 
                 <div class="pt-4 mt-2 border-t border-border-theme">
                     <Link href="/admin/theme" @click="isSidebarOpen = false" class="block px-4 py-3 rounded-xl font-semibold transition-all" 
